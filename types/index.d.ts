@@ -1,10 +1,11 @@
-// Type definitions for pptxgenjs 4.0.1
-// Project: https://gitbrent.github.io/PptxGenJS/
+// Type definitions for pptxgenjsmbar2.0 1.0.0
+// Original project: https://gitbrent.github.io/PptxGenJS/
 // Definitions by: Brent Ely <https://github.com/gitbrent/>
 //                 Michael Beaumont <https://github.com/michaelbeaumont>
 //                 Nicholas Tietz-Sokolsky <https://github.com/ntietz>
 //                 David Adams <https://github.com/iota-pi>
 //                 Stephen Cronin <https://github.com/cronin4392>
+// Modified by: MBAR
 // TypeScript Version: 3.x
 
 export as namespace PptxGenJS
@@ -1115,7 +1116,7 @@ declare namespace PptxGenJS {
 			/**
 			 * Indentation (space between bullet and text) (points)
 			 * @since v3.3.0
-			 * @default 27 // DEF_BULLET_MARGIN
+			 * @default 14 // DEF_BULLET_MARGIN
 			 * @example 10 // Indents text 10 points from bullet
 			 */
 			indent?: number
@@ -1846,6 +1847,7 @@ declare namespace PptxGenJS {
 		 * line spacing multiple (percent)
 		 * - range: 0.0-9.99
 		 * - PowerPoint: Paragraph > Indents and Spacing > Line Spacing: > "Multiple"
+		 * default: 1.0 (single spacing)
 		 * @example 1.5 // 1.5X line spacing
 		 * @since v3.5.0
 		 */

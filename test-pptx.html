@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PptxGenJS Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>PptxGenJS Test Page</h1>
+    <p>Click a button below to test generating a PPTX file:</p>
+    
+    <button onclick="testBasicSlide()">Test Basic Slide</button>
+    <button onclick="testTextSlide()">Test Text Slide</button>
+    <button onclick="testShapeSlide()">Test Shape Slide</button>
+    <button onclick="testChartSlide()">Test Chart Slide</button>
+    <button onclick="testTableSlide()">Test Table Slide</button>
+    <button onclick="runAllTests()">Run All Tests</button>
+    
+    <div id="result" class="result"></div>
+
+    <!-- Load the local bundle -->
+    <script src="./dist/pptxgen.bundle.js"></script>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        function showResult(message, isError = false) {
+            resultDiv.innerHTML += `<p class="${isError ? 'error' : 'success'}">${message}</p>`;
+        }
+        
+        function clearResults() {
+            resultDiv.innerHTML = '';
+        }
+        
+        async function testBasicSlide() {
+            try {
+                clearResults();
+                showResult('Creating basic slide...');
+                
+                const pptx = new PptxGenJS();
+                pptx.author = 'Test Author';
+                pptx.title = 'Basic Test Presentation';
+                
+                const slide = pptx.addSlide();
+                slide.addText('Hello World!', { x: 1, y: 1, w: 8, h: 1, fontSize: 24 });
+                
+                await pptx.writeFile({ fileName: 'test-basic.pptx' });
+                showResult('✓ Basic slide test PASSED - File downloaded successfully!');
+            } catch (error) {
+                showResult(`✗ Basic slide test FAILED: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        async function testTextSlide() {
+            try {
+                clearResults();
+                showResult('Creating text slide...');
+                
+                const pptx = new PptxGenJS();
+                const slide = pptx.addSlide();
+                
+                // Test various text options
+                slide.addText('Title Text', { 
+                    x: 1, y: 0.5, w: 8, h: 1, 
+                    fontSize: 36, 
+                    bold: true, 
+                    color: '000000' 
+                });
+                
+                slide.addText('Bullet point text with new defaults', { 
+                    x: 1, y: 2, w: 8, h: 2, 
+                    fontSize: 18, 
+                    bullet: true 
+                });
+                
+                // Test text with bullets and indentation
+                slide.addText([
+                    { text: 'First level bullet', options: { bullet: true } },
+                    { text: 'Second level bullet', options: { bullet: { indentLevel: 1 } } },
+                    { text: 'Third level bullet', options: { bullet: { indentLevel: 2 } } }
+                ], { x: 1, y: 3.5, w: 8, h: 2 });
+                
+                await pptx.writeFile({ fileName: 'test-text.pptx' });
+                showResult('✓ Text slide test PASSED - File downloaded successfully!');
+            } catch (error) {
+                showResult(`✗ Text slide test FAILED: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        async function testShapeSlide() {
+            try {
+                clearResults();
+                showResult('Creating shape slide...');
+                
+                const pptx = new PptxGenJS();
+                const slide = pptx.addSlide();
+                
+                // Test various shapes
+                slide.addShape(pptx.ShapeType.rect, { 
+                    x: 1, y: 1, w: 2, h: 1, 
+                    fill: { color: '006D89' } 
+                });
+                
+                slide.addShape(pptx.ShapeType.ellipse, { 
+                    x: 4, y: 1, w: 2, h: 1, 
+                    fill: { color: 'DC7900' } 
+                });
+                
+                slide.addShape(pptx.ShapeType.roundRect, { 
+                    x: 7, y: 1, w: 2, h: 1, 
+                    fill: { color: 'B92051' } 
+                });
+                
+                await pptx.writeFile({ fileName: 'test-shapes.pptx' });
+                showResult('✓ Shape slide test PASSED - File downloaded successfully!');
+            } catch (error) {
+                showResult(`✗ Shape slide test FAILED: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        async function testChartSlide() {
+            try {
+                clearResults();
+                showResult('Creating chart slide...');
+                
+                const pptx = new PptxGenJS();
+                const slide = pptx.addSlide();
+                
+                // Test bar chart with new colors
+                const chartData = [
+                    { name: 'Region 1', labels: ['Q1', 'Q2', 'Q3', 'Q4'], values: [10, 20, 30, 40] },
+                    { name: 'Region 2', labels: ['Q1', 'Q2', 'Q3', 'Q4'], values: [15, 25, 35, 45] }
+                ];
+                
+                slide.addChart(pptx.ChartType.bar, chartData, { 
+                    x: 1, y: 1, w: 8, h: 4,
+                    showValue: true,
+                    showPercent: true
+                });
+                
+                await pptx.writeFile({ fileName: 'test-chart.pptx' });
+                showResult('✓ Chart slide test PASSED - File downloaded successfully!');
+            } catch (error) {
+                showResult(`✗ Chart slide test FAILED: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        async function testTableSlide() {
+            try {
+                clearResults();
+                showResult('Creating table slide...');
+                
+                const pptx = new PptxGenJS();
+                const slide = pptx.addSlide();
+                
+                // Test table with new cell border defaults
+                const tableRows = [
+                    ['Header 1', 'Header 2', 'Header 3'],
+                    ['Cell 1', 'Cell 2', 'Cell 3'],
+                    ['Cell 4', 'Cell 5', 'Cell 6']
+                ];
+                
+                slide.addTable(tableRows, { 
+                    x: 1, y: 1, w: 8, 
+                    colW: [2.5, 2.5, 2.5],
+                    border: { pt: 0.25, color: 'BBBDBF' }
+                });
+                
+                await pptx.writeFile({ fileName: 'test-table.pptx' });
+                showResult('✓ Table slide test PASSED - File downloaded successfully!');
+            } catch (error) {
+                showResult(`✗ Table slide test FAILED: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        async function runAllTests() {
+            clearResults();
+            showResult('Running all tests...');
+            
+            try {
+                const pptx = new PptxGenJS();
+                pptx.author = 'Test Author';
+                pptx.title = 'All Tests Presentation';
+                pptx.subject = 'Testing all features';
+                
+                // Test 1: Basic text slide
+                const slide1 = pptx.addSlide();
+                slide1.addText('Test Presentation', { 
+                    x: 1, y: 0.5, w: 8, h: 1, 
+                    fontSize: 36, 
+                    bold: true, 
+                    color: '000000' 
+                });
+                slide1.addText('This presentation tests all the changed features', { 
+                    x: 1, y: 2, w: 8, h: 1, 
+                    fontSize: 18 
+                });
+                showResult('✓ Slide 1 (text) created');
+                
+                // Test 2: Shapes with new default colors
+                const slide2 = pptx.addSlide();
+                slide2.addText('Shapes Test', { x: 1, y: 0.5, w: 8, h: 0.5, fontSize: 24 });
+                slide2.addShape(pptx.ShapeType.rect, { x: 1, y: 1.5, w: 2, h: 1, fill: { color: '006D89' } });
+                slide2.addShape(pptx.ShapeType.ellipse, { x: 4, y: 1.5, w: 2, h: 1, fill: { color: 'DC7900' } });
+                slide2.addShape(pptx.ShapeType.roundRect, { x: 7, y: 1.5, w: 2, h: 1, fill: { color: 'B92051' } });
+                showResult('✓ Slide 2 (shapes) created');
+                
+                // Test 3: Chart with new default colors
+                const slide3 = pptx.addSlide();
+                slide3.addText('Chart Test', { x: 1, y: 0.3, w: 8, h: 0.5, fontSize: 24 });
+                const chartData = [
+                    { name: 'Series 1', labels: ['A', 'B', 'C', 'D'], values: [10, 20, 30, 40] },
+                    { name: 'Series 2', labels: ['A', 'B', 'C', 'D'], values: [15, 25, 35, 45] }
+                ];
+                slide3.addChart(pptx.ChartType.bar, chartData, { 
+                    x: 0.5, y: 1, w: 9, h: 4,
+                    showValue: true
+                });
+                showResult('✓ Slide 3 (chart) created');
+                
+                // Test 4: Table with new default borders
+                const slide4 = pptx.addSlide();
+                slide4.addText('Table Test', { x: 1, y: 0.5, w: 8, h: 0.5, fontSize: 24 });
+                const tableRows = [
+                    [{ text: 'Header 1', options: { bold: true } }, { text: 'Header 2', options: { bold: true } }, { text: 'Header 3', options: { bold: true } }],
+                    ['Data 1', 'Data 2', 'Data 3'],
+                    ['Data 4', 'Data 5', 'Data 6'],
+                    ['Data 7', 'Data 8', 'Data 9']
+                ];
+                slide4.addTable(tableRows, { x: 1, y: 1.5, w: 8, colW: [2.5, 2.5, 2.5] });
+                showResult('✓ Slide 4 (table) created');
+                
+                // Test 5: Bullets with new defaults
+                const slide5 = pptx.addSlide();
+                slide5.addText('Bullets Test', { x: 1, y: 0.5, w: 8, h: 0.5, fontSize: 24 });
+                slide5.addText([
+                    { text: 'First level bullet (DEFAULT)', options: { bullet: true } },
+                    { text: 'Second level bullet (SECOND)', options: { bullet: { indentLevel: 1 } } },
+                    { text: 'Third level bullet (THIRD)', options: { bullet: { indentLevel: 2 } } },
+                    { text: 'Fourth level bullet (FOURTH)', options: { bullet: { indentLevel: 3 } } }
+                ], { x: 1, y: 1.5, w: 8, h: 3 });
+                showResult('✓ Slide 5 (bullets) created');
+                
+                // Write the file
+                await pptx.writeFile({ fileName: 'test-all-features.pptx' });
+                showResult('✓ All tests PASSED - File downloaded successfully!');
+                
+            } catch (error) {
+                showResult(`✗ Test FAILED: ${error.message}`, true);
+                console.error(error);
+            }
+        }
+        
+        // Log version info
+        console.log('PptxGenJS version:', PptxGenJS ? 'Loaded' : 'Not loaded');
+    </script>
+</body>
+</html>

@@ -312,16 +312,11 @@ export default class PptxGenJS implements IPresentationProps {
 	}
 
 	constructor() {
-		const layout4x3: PresLayout = { name: 'screen4x3', width: 9144000, height: 6858000 }
-		const layout16x9: PresLayout = { name: 'screen16x9', width: 9144000, height: 5143500 }
-		const layout16x10: PresLayout = { name: 'screen16x10', width: 9144000, height: 5715000 }
-		const layoutWide: PresLayout = { name: 'custom', width: 12192000, height: 6858000 }
+		// S-P Global custom layout (13.333" x 7.5")
+		const layoutSPGlobal: PresLayout = { name: 'S-P Global EDP 2026 16-9', width: 12192000, height: 6858000 }
 		// Set available layouts
 		this.LAYOUTS = {
-			LAYOUT_4x3: layout4x3,
-			LAYOUT_16x9: layout16x9,
-			LAYOUT_16x10: layout16x10,
-			LAYOUT_WIDE: layoutWide,
+			'S-P Global EDP 2026 16-9': layoutSPGlobal,
 		}
 
 		// Core

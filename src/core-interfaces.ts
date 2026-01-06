@@ -287,7 +287,7 @@ export interface TextBaseProps {
 		/**
 		 * Indentation (space between bullet and text) (points)
 		 * @since v3.3.0
-		 * @default 27 // DEF_BULLET_MARGIN
+		 * @default 14 // DEF_BULLET_MARGIN
 		 * @example 10 // Indents text 10 points from bullet
 		 */
 		indent?: number
@@ -320,6 +320,13 @@ export interface TextBaseProps {
 		 * @example 10 // numbered bullets start with 10
 		 */
 		numberStartAt?: number
+		/**
+		 * Bullet indent levels start at
+		 * @since v1.0.0
+		 * @default 0
+		 * @example 0 // bullets start with first level indent
+		 */
+		indentLevel?: number
 
 		// DEPRECATED
 
@@ -463,13 +470,13 @@ export interface ThemeProps {
 	/**
 	 * Headings font face name
 	 * @example 'Arial Narrow'
-	 * @default 'Calibri Light'
+	 * @default 'Arial'
 	 */
 	headFontFace?: string
 	/**
 	 * Body font face name
 	 * @example 'Arial'
-	 * @default 'Calibri'
+	 * @default 'Arial'
 	 */
 	bodyFontFace?: string
 }
@@ -1044,6 +1051,7 @@ export interface TextPropsOptions extends PositionProps, DataOrPathProps, TextBa
 	 * line spacing multiple (percent)
 	 * - range: 0.0-9.99
 	 * - PowerPoint: Paragraph > Indents and Spacing > Line Spacing: > "Multiple"
+	 * @default 1.0 // single line spacing
 	 * @example 1.5 // 1.5X line spacing
 	 * @since v3.5.0
 	 */
@@ -1260,7 +1268,7 @@ export interface IChartPropsBase {
 	 */
 	showLegend?: boolean
 	/**
-	 * @default false
+	 * @default true
 	 */
 	showPercent?: boolean
 	/**
@@ -1272,7 +1280,7 @@ export interface IChartPropsBase {
 	 */
 	showTitle?: boolean
 	/**
-	 * @default false
+	 * @default true
 	 */
 	showValue?: boolean
 	/**
