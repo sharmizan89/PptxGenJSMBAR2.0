@@ -518,7 +518,7 @@ export default class PptxGenJS implements IPresentationProps {
 
 			// C: Create a Layout/Master/Rel/Slide file for each SlideLayout and Slide
 			this.slideLayouts.forEach((layout, idx) => {
-				zip.file(`ppt/slideLayouts/slideLayout${idx + 1}.xml`, genXml.makeXmlLayout(layout))
+				zip.file(`ppt/slideLayouts/slideLayout${idx + 1}.xml`, genXml.makeXmlLayout(layout, idx))
 				zip.file(`ppt/slideLayouts/_rels/slideLayout${idx + 1}.xml.rels`, genXml.makeXmlSlideLayoutRel(idx + 1, this.slideLayouts))
 			})
 			this.slides.forEach((slide, idx) => {
