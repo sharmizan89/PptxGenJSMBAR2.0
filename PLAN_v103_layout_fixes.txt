@@ -1,0 +1,437 @@
+=================================================================================
+PptxGenJSMBAR2.0 - PLAN FOR v.1.0.3 - Slide Layout Naming & Zero Margin Fixes
+=================================================================================
+
+OBJECTIVES:
+-----------
+1. Slide Master (slideMaster1.xml): Named 'S-P Global EDP 2026 16-9' (grandparent)
+2. First Slide Layout (slideLayout1.xml): Named 'Content - no subtitle' - DEFINED BY USER
+   via pptx.defineSlideMaster({ title: 'Content - no subtitle', ... })
+3. All User-Defined Layouts: Retain their custom names from defineSlideMaster()
+4. All layout placeholders have ZERO inset margins (lIns, tIns, rIns, bIns = 0)
+5. Everything remains FULLY DYNAMIC - no hardcoded XML for layouts
+
+KEY INSIGHT:
+------------
+The user will define the first layout ('Content - no subtitle') themselves using
+defineSlideMaster(). This means ALL layouts are user-defined and dynamic. The library
+should NOT pre-create a default layout in the constructor - instead, the user controls
+all layouts through defineSlideMaster() calls.
+
+=================================================================================
+CURRENT STATE ANALYSIS (v.1.0.2):
+=================================================================================
+
+FILE: src/core-enums.ts (lines 25-26)
+-------------------------------------
+Current:
+  export const DEF_PRES_LAYOUT = 'S-P Global EDP 2026 16-9'
+  export const DEF_PRES_LAYOUT_NAME = 'S-P Global EDP 2026 16-9'
+
+Analysis: DEF_PRES_LAYOUT_NAME is used for the default layout that gets auto-created
+in the constructor. Since the user will define ALL layouts via defineSlideMaster(),
+this default layout may be unnecessary OR should remain as a fallback.
+
+
+FILE: src/pptxgen.ts (lines 338-351) - Constructor initializes slideLayouts
+---------------------------------------------------------------------------
+Current:
+  this._slideLayouts = [
+    {
+      _margin: DEF_SLIDE_MARGIN_IN,
+      _name: DEF_PRES_LAYOUT_NAME,  // <-- Creates default layout automatically
+      _presLayout: this._presLayout,
+      _rels: [],
+      _relsChart: [],
+      _relsMedia: [],
+      _slide: null,
+      _slideNum: 1000,
+      _slideNumberProps: null,
+      _slideObjects: [],
+    },
+  ]
+
+Issue: This auto-creates a default layout. If user calls defineSlideMaster() with
+title: 'Content - no subtitle', they get TWO layouts:
+  1. slideLayout1.xml = 'S-P Global EDP 2026 16-9' (auto-created, unwanted)
+  2. slideLayout2.xml = 'Content - no subtitle' (user-defined, wanted)
+
+The user wants slideLayout1.xml to be 'Content - no subtitle'.
+
+
+FILE: src/pptxgen.ts (lines 737-768) - defineSlideMaster() method
+-----------------------------------------------------------------
+Current:
+  defineSlideMaster(props: SlideMasterProps): void {
+    const propsClone = JSON.parse(JSON.stringify(props))
+    if (!propsClone.title) throw new Error(...)
+    
+    const newLayout: SlideLayout = {
+      _margin: propsClone.margin || DEF_SLIDE_MARGIN_IN,
+      _name: propsClone.title,  // <-- User's title becomes layout name
+      ...
+    }
+    ...
+    this.slideLayouts.push(newLayout)  // <-- Appends to array
+  }
+
+This is CORRECT for creating user-defined layouts. The name comes from props.title.
+
+
+FILE: src/gen-xml.ts (line 86-87) - slideObjectToXml()
+------------------------------------------------------
+Current:
+  let strSlideXml: string = slide._name ? '<p:cSld name="' + slide._name + '">' : '<p:cSld>'
+
+This is CORRECT - the layout name comes dynamically from the layout's _name property.
+
+
+FILE: src/gen-xml.ts (lines 1073-1087) - genXmlBodyProperties()
+---------------------------------------------------------------
+Current: Margins are set dynamically based on slideObject.options._bodyProp values.
+  if (slideObject.options._bodyProp.lIns || slideObject.options._bodyProp.lIns === 0) 
+    bodyProperties += ` lIns="${slideObject.options._bodyProp.lIns}"`
+  
+For ZERO margins: User can pass margin: 0 in their placeholder options within
+defineSlideMaster(), which will set lIns=0, tIns=0, rIns=0, bIns=0.
+
+
+=================================================================================
+PROPOSED SOLUTION - USER DEFINES ALL LAYOUTS
+=================================================================================
+
+APPROACH: Remove or modify the default layout so that the FIRST layout defined
+by the user via defineSlideMaster() becomes slideLayout1.xml.
+
+There are TWO options:
+
+------------------------------------------------------------------------------
+OPTION A: Start with EMPTY slideLayouts array (RECOMMENDED)
+------------------------------------------------------------------------------
+Remove the default layout from the constructor. The first defineSlideMaster()
+call will create slideLayout1.xml.
+
+FILE: src/pptxgen.ts (lines 338-351)
+
+CHANGE FROM:
+```typescript
+this._slideLayouts = [
+  {
+    _margin: DEF_SLIDE_MARGIN_IN,
+    _name: DEF_PRES_LAYOUT_NAME,
+    _presLayout: this._presLayout,
+    _rels: [],
+    _relsChart: [],
+    _relsMedia: [],
+    _slide: null,
+    _slideNum: 1000,
+    _slideNumberProps: null,
+    _slideObjects: [],
+  },
+]
+```
+
+CHANGE TO:
+```typescript
+this._slideLayouts = []
+```
+
+IMPACT:
+- User MUST call defineSlideMaster() at least once before adding slides
+- First defineSlideMaster() creates slideLayout1.xml with user's title
+- Fully dynamic - no pre-created layouts
+
+ADDITIONAL CHANGES NEEDED:
+- Update setSlideNumber() to handle empty slideLayouts gracefully
+- Update any code that assumes slideLayouts[0] exists
+
+
+------------------------------------------------------------------------------
+OPTION B: Replace default layout with FIRST defineSlideMaster() call
+------------------------------------------------------------------------------
+Keep the default layout but allow the first defineSlideMaster() to REPLACE it
+instead of appending.
+
+FILE: src/pptxgen.ts - defineSlideMaster() method
+
+CHANGE FROM:
+```typescript
+// STEP 2: Add it to layout defs
+this.slideLayouts.push(newLayout)
+```
+
+CHANGE TO:
+```typescript
+// STEP 2: Add it to layout defs
+// If this is the first user-defined layout AND the only existing layout is the default,
+// replace the default instead of appending
+if (this.slideLayouts.length === 1 && this.slideLayouts[0]._name === DEF_PRES_LAYOUT_NAME) {
+  this.slideLayouts[0] = newLayout
+} else {
+  this.slideLayouts.push(newLayout)
+}
+```
+
+IMPACT:
+- First defineSlideMaster() replaces the default layout
+- Subsequent defineSlideMaster() calls append as normal
+- More backward-compatible if users rely on default layout
+
+
+=================================================================================
+RECOMMENDED SOLUTION: OPTION A (Empty slideLayouts)
+=================================================================================
+
+This is cleaner and gives the user full control. Here are all required changes:
+
+------------------------------------------------------------------------------
+STEP 1: src/pptxgen.ts - Empty the default slideLayouts array
+------------------------------------------------------------------------------
+LOCATION: Lines 338-351
+
+CHANGE FROM:
+```typescript
+		this._slideLayouts = [
+			{
+				_margin: DEF_SLIDE_MARGIN_IN,
+				_name: DEF_PRES_LAYOUT_NAME,
+				_presLayout: this._presLayout,
+				_rels: [],
+				_relsChart: [],
+				_relsMedia: [],
+				_slide: null,
+				_slideNum: 1000,
+				_slideNumberProps: null,
+				_slideObjects: [],
+			},
+		]
+```
+
+CHANGE TO:
+```typescript
+		this._slideLayouts = []
+```
+
+
+------------------------------------------------------------------------------
+STEP 2: src/pptxgen.ts - Update setSlideNumber() to handle empty layouts
+------------------------------------------------------------------------------
+LOCATION: Line 410
+
+CHANGE FROM:
+```typescript
+		// 2: Add slideNumber to DEF_PRES_LAYOUT_NAME layout
+		this.slideLayouts.filter(layout => layout._name === DEF_PRES_LAYOUT_NAME)[0]._slideNumberProps = slideNum
+```
+
+CHANGE TO:
+```typescript
+		// 2: Add slideNumber to first layout (if exists)
+		if (this.slideLayouts.length > 0) {
+			this.slideLayouts[0]._slideNumberProps = slideNum
+		}
+```
+
+
+------------------------------------------------------------------------------
+STEP 3: src/pptxgen.ts - Remove DEF_PRES_LAYOUT_NAME import (if unused)
+------------------------------------------------------------------------------
+LOCATION: Line 70
+
+Check if DEF_PRES_LAYOUT_NAME is used elsewhere in pptxgen.ts. If not, remove
+from import. (It's still used in gen-xml.ts for background check, so keep it there.)
+
+
+------------------------------------------------------------------------------
+STEP 4: ZERO MARGINS - User specifies in defineSlideMaster()
+------------------------------------------------------------------------------
+The user can set zero margins on placeholders by passing margin: 0 in their
+defineSlideMaster() call:
+
+EXAMPLE USER CODE:
+```javascript
+pptx.defineSlideMaster({
+  title: 'Content - no subtitle',
+  background: { color: 'FFFFFF' },
+  objects: [
+    {
+      placeholder: {
+        options: {
+          name: 'body',
+          type: 'body',
+          x: 0.5,
+          y: 1.0,
+          w: 9.0,
+          h: 5.5,
+          margin: 0,  // <-- This sets lIns=0, tIns=0, rIns=0, bIns=0
+        },
+        text: '',
+      },
+    },
+  ],
+})
+```
+
+The existing code in gen-xml.ts (lines 396-405) already handles this:
+```typescript
+if (slideItemObj.options.margin && Array.isArray(slideItemObj.options.margin)) {
+  slideItemObj.options._bodyProp.lIns = valToPts(slideItemObj.options.margin[0] || 0)
+  slideItemObj.options._bodyProp.rIns = valToPts(slideItemObj.options.margin[1] || 0)
+  slideItemObj.options._bodyProp.bIns = valToPts(slideItemObj.options.margin[2] || 0)
+  slideItemObj.options._bodyProp.tIns = valToPts(slideItemObj.options.margin[3] || 0)
+} else if (typeof slideItemObj.options.margin === 'number') {
+  slideItemObj.options._bodyProp.lIns = valToPts(slideItemObj.options.margin)
+  slideItemObj.options._bodyProp.rIns = valToPts(slideItemObj.options.margin)
+  slideItemObj.options._bodyProp.bIns = valToPts(slideItemObj.options.margin)
+  slideItemObj.options._bodyProp.tIns = valToPts(slideItemObj.options.margin)
+}
+```
+
+When margin: 0 is passed, all insets become 0.
+
+
+=================================================================================
+COMPLETE CODE CHANGES SUMMARY
+=================================================================================
+
+FILE: src/pptxgen.ts
+--------------------
+
+CHANGE 1 - Empty slideLayouts array (lines 338-351):
+
+FROM:
+```typescript
+		this._slideLayouts = [
+			{
+				_margin: DEF_SLIDE_MARGIN_IN,
+				_name: DEF_PRES_LAYOUT_NAME,
+				_presLayout: this._presLayout,
+				_rels: [],
+				_relsChart: [],
+				_relsMedia: [],
+				_slide: null,
+				_slideNum: 1000,
+				_slideNumberProps: null,
+				_slideObjects: [],
+			},
+		]
+```
+
+TO:
+```typescript
+		this._slideLayouts = []
+```
+
+
+CHANGE 2 - Update setSlideNumber (line 408-410):
+
+FROM:
+```typescript
+		// 2: Add slideNumber to DEF_PRES_LAYOUT_NAME layout
+		this.slideLayouts.filter(layout => layout._name === DEF_PRES_LAYOUT_NAME)[0]._slideNumberProps = slideNum
+```
+
+TO:
+```typescript
+		// 2: Add slideNumber to first layout (if any layouts exist)
+		if (this.slideLayouts.length > 0) {
+			this.slideLayouts[0]._slideNumberProps = slideNum
+		}
+```
+
+
+=================================================================================
+USER WORKFLOW AFTER CHANGES
+=================================================================================
+
+The user will now create their presentation like this:
+
+```javascript
+const pptx = new PptxGenJS()
+
+// FIRST: Define the 'Content - no subtitle' layout (becomes slideLayout1.xml)
+pptx.defineSlideMaster({
+  title: 'Content - no subtitle',
+  background: { color: 'FFFFFF' },
+  objects: [
+    {
+      placeholder: {
+        options: {
+          name: 'body',
+          type: 'body',
+          x: 0.5,
+          y: 1.0,
+          w: 9.0,
+          h: 5.5,
+          margin: 0,  // Zero inset margins
+        },
+        text: '',
+      },
+    },
+  ],
+})
+
+// OPTIONAL: Define additional layouts (become slideLayout2.xml, slideLayout3.xml, etc.)
+pptx.defineSlideMaster({
+  title: 'Title Slide',
+  background: { color: '000000' },
+  objects: [...],
+})
+
+// Add slides using the defined layouts
+const slide1 = pptx.addSlide({ masterName: 'Content - no subtitle' })
+slide1.addText('Hello World', { x: 1, y: 1 })
+
+// Export
+pptx.writeFile({ fileName: 'presentation.pptx' })
+```
+
+
+=================================================================================
+VERIFICATION CHECKLIST
+=================================================================================
+
+After making these changes:
+
+[ ] 1. Build the project: npm run build
+
+[ ] 2. Test: Create PPTX with single defineSlideMaster() call
+     - pptx.defineSlideMaster({ title: 'Content - no subtitle', ... })
+     - Verify slideLayout1.xml has <p:cSld name="Content - no subtitle">
+     - Verify only ONE slideLayout file exists
+
+[ ] 3. Test: Create PPTX with multiple defineSlideMaster() calls
+     - First call: title: 'Content - no subtitle' → slideLayout1.xml
+     - Second call: title: 'Custom Layout' → slideLayout2.xml
+     - Verify each layout has correct name
+
+[ ] 4. Test: Verify zero margins work
+     - Pass margin: 0 in placeholder options
+     - Check generated XML has lIns="0" tIns="0" rIns="0" bIns="0"
+
+[ ] 5. Test: Slides reference correct layouts
+     - addSlide({ masterName: 'Content - no subtitle' }) uses slideLayout1
+     - addSlide({ masterName: 'Custom Layout' }) uses slideLayout2
+
+[ ] 6. Test: Slide numbers work (if enabled)
+
+
+=================================================================================
+SUMMARY
+=================================================================================
+
+Total files to modify: 1
+- src/pptxgen.ts (2 changes)
+
+This solution:
+✓ Removes auto-created default layout
+✓ User defines ALL layouts via defineSlideMaster()
+✓ First defineSlideMaster() creates slideLayout1.xml with user's title
+✓ Layout names are fully controlled by user
+✓ Zero margins achieved by passing margin: 0 in placeholder options
+✓ Everything is FULLY DYNAMIC
+✓ No hardcoded layout names in the library
+
+=================================================================================
+END OF PLAN
+=================================================================================

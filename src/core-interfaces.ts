@@ -453,7 +453,7 @@ export interface PlaceholderProps extends PositionProps, TextBaseProps {
 	/**
 	 * margin (points)
 	 */
-	margin?: Margin
+	margin: 0 | [0, 0, 0, 0]
 }
 export interface ObjectNameProps {
 	/**

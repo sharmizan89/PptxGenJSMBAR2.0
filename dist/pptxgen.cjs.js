@@ -1,4 +1,4 @@
-/* PptxGenJS 4.0.1 @ 2026-01-06T07:52:55.051Z */
+/* PptxGenJS 4.0.1 @ 2026-01-06T12:39:46.220Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -48,7 +48,7 @@ const REGEX_HEX_COLOR = /^[0-9a-fA-F]{6}$/;
 const LINEH_MODIFIER = 1.67; // AKA: Golden Ratio Typography
 const DEF_BULLET_MARGIN = 14;
 const DEF_CELL_BORDER = { type: 'solid', color: 'BBBDBF', pt: 0.25 };
-const DEF_CELL_MARGIN_IN = [0.05, 0.02, 0.05, 0.04]; // "Normal" margins in PPT-2021 ("Narrow" is `0.05` for all 4)
+const DEF_CELL_MARGIN_IN = [0.05, 0.04, 0.05, 0.02]; // "Normal" margins in PPT-2021 ("Narrow" is `0.05` for all 4)
 const DEF_CHART_BORDER = { };
 const DEF_CHART_GRIDLINE = { color: 'D9D9D9', style: 'solid', size: 0.75, cap: 'flat' };
 const DEF_FONT_COLOR = '000000';
@@ -6919,8 +6919,10 @@ class PptxGenJS {
         this.setSlideNumber = (slideNum) => {
             // 1: Add slideNumber to slideMaster1.xml
             this.masterSlide._slideNumberProps = slideNum;
-            // 2: Add slideNumber to DEF_PRES_LAYOUT_NAME layout
-            this.slideLayouts.filter(layout => layout._name === DEF_PRES_LAYOUT_NAME)[0]._slideNumberProps = slideNum;
+            // 2: Add slideNumber to first layout (if exists)
+            if (this.slideLayouts.length > 0) {
+                this.slideLayouts[0]._slideNumberProps = slideNum;
+            }
         };
         /**
          * Create all chart and media rels for this Presentation
@@ -7084,20 +7086,7 @@ class PptxGenJS {
         };
         this._rtlMode = false;
         //
-        this._slideLayouts = [
-            {
-                _margin: DEF_SLIDE_MARGIN_IN,
-                _name: DEF_PRES_LAYOUT_NAME,
-                _presLayout: this._presLayout,
-                _rels: [],
-                _relsChart: [],
-                _relsMedia: [],
-                _slide: null,
-                _slideNum: 1000,
-                _slideNumberProps: null,
-                _slideObjects: [],
-            },
-        ];
+        this._slideLayouts = [];
         this._slides = [];
         this._sections = [];
         this._masterSlide = {

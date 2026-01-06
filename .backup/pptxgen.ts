@@ -67,6 +67,7 @@ import {
 	CHART_TYPE,
 	ChartType,
 	DEF_PRES_LAYOUT,
+	DEF_PRES_LAYOUT_NAME,
 	DEF_SLIDE_MARGIN_IN,
 	EMU,
 	OutputType,
@@ -334,7 +335,20 @@ export default class PptxGenJS implements IPresentationProps {
 		}
 		this._rtlMode = false
 		//
-		this._slideLayouts = []
+		this._slideLayouts = [
+			{
+				_margin: DEF_SLIDE_MARGIN_IN,
+				_name: DEF_PRES_LAYOUT_NAME,
+				_presLayout: this._presLayout,
+				_rels: [],
+				_relsChart: [],
+				_relsMedia: [],
+				_slide: null,
+				_slideNum: 1000,
+				_slideNumberProps: null,
+				_slideObjects: [],
+			},
+		]
 		this._slides = []
 		this._sections = []
 		this._masterSlide = {
@@ -392,10 +406,8 @@ export default class PptxGenJS implements IPresentationProps {
 		// 1: Add slideNumber to slideMaster1.xml
 		this.masterSlide._slideNumberProps = slideNum
 
-		// 2: Add slideNumber to first layout (if exists)
-		if (this.slideLayouts.length > 0) {
-			this.slideLayouts[0]._slideNumberProps = slideNum
-		}
+		// 2: Add slideNumber to DEF_PRES_LAYOUT_NAME layout
+		this.slideLayouts.filter(layout => layout._name === DEF_PRES_LAYOUT_NAME)[0]._slideNumberProps = slideNum
 	}
 
 	/**

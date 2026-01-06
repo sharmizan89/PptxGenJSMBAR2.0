@@ -1275,7 +1275,7 @@ declare namespace PptxGenJS {
 		/**
 		 * margin (points)
 		 */
-		margin?: Margin
+		margin: 0 | [0, 0, 0, 0]
 	}
 	export interface ObjectNameProps {
 		/**
