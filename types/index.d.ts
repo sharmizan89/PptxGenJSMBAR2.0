@@ -1292,13 +1292,13 @@ declare namespace PptxGenJS {
 		/**
 		 * Headings font face name
 		 * @example 'Arial Narrow'
-		 * @default 'Calibri Light'
+		 * @default 'Arial'
 		 */
 		headFontFace?: string
 		/**
 		 * Body font face name
 		 * @example 'Arial'
-		 * @default 'Calibri'
+		 * @default 'Arial'
 		 */
 		bodyFontFace?: string
 	}
