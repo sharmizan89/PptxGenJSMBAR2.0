@@ -1,0 +1,643 @@
+<blockquote><b>Executing step_agentImage:data</b><br><i>data:image/png;base64,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</i></blockquote>  
+<blockquote><b>Executing step_normalize:prompt</b><br><i>herold</i></blockquote>  
+<blockquote><b>Executing step_energyCheck:if</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_divisionMatch:jmespath</b><br><i>herold</i></blockquote>  
+<blockquote><b>Executing step_division:data</b><br><i>herold</i></blockquote>  
+<blockquote><b>Executing step_date:prompt</b><br><i>January 13, 2026</i></blockquote>  
+<blockquote><b>Executing step_sphereSearch:restapi</b><br><i>{
+  "data": {
+    "users": {
+      "byQueryText": {
+        "data": [
+          {
+            "id": 266796,
+  ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_authorEmail:prompt</b><br><i>mizan.binabdulrahman@spglobal.com</i></blockquote>  
+<blockquote><b>Executing step_authorJob:prompt</b><br><i>LEAD EDITOR</i></blockquote>  
+<blockquote><b>Executing step_logos:data</b><br><i>{
+  "energy": {
+    "text": "S&P Global Energy",
+    "Images": {
+      "redBlack": "0dd5f7539ef187524017cfb9facbb79c.png",
+      "blackBlack": "b7dd9418a4c2f881e9fc5ffb942fbcd4.png",
+      "whiteWhite": "0d1eb25c91d9ca47feca59c81b726357.png",
+      "whiteRed": "4ebf46970dd30ed73bbae53c35377a40.png"
+    },
+  ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_divisionText:jmespath</b><br><i>Herold</i></blockquote>  
+<blockquote><b>Executing step_logoPosition1:jmespath</b><br><i>x: 0.61, y: 7.00, w: 0.83, h: 0.40</i></blockquote>  
+<blockquote><b>Executing step_logoPosition2:jmespath</b><br><i>x: 0.61, y: 7.00, w: 0.83, h: 0.40</i></blockquote>  
+<blockquote><b>Executing step_logoPosition3:jmespath</b><br><i>x: 0.61, y: 0.41, w: 1.46, h: 0.70</i></blockquote>  
+<blockquote><b>Executing step_energyLogoCheck:if</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_enRedBlack:jmespath</b><br><i>0dd5f7539ef187524017cfb9facbb79c.png</i></blockquote>  
+<blockquote><b>Executing step_enBlackBlack:jmespath</b><br><i>b7dd9418a4c2f881e9fc5ffb942fbcd4.png</i></blockquote>  
+<blockquote><b>Executing step_enWhiteRed:jmespath</b><br><i>4ebf46970dd30ed73bbae53c35377a40.png</i></blockquote>  
+<blockquote><b>Executing step_enWhiteWhite:jmespath</b><br><i>0d1eb25c91d9ca47feca59c81b726357.png</i></blockquote>  
+<blockquote><b>Executing step_redBlack:data</b><br><i>0dd5f7539ef187524017cfb9facbb79c.png</i></blockquote>  
+<blockquote><b>Executing step_blackBlack:data</b><br><i>b7dd9418a4c2f881e9fc5ffb942fbcd4.png</i></blockquote>  
+<blockquote><b>Executing step_whiteRed:data</b><br><i>4ebf46970dd30ed73bbae53c35377a40.png</i></blockquote>  
+<blockquote><b>Executing step_whiteWhite:data</b><br><i>0d1eb25c91d9ca47feca59c81b726357.png</i></blockquote>  
+<blockquote><b>Executing step_imgPrefix:data</b><br><i>https://snp-mediaportal.qbank.se/assets/deployedFiles/</i></blockquote>  
+<blockquote><b>Executing step_printLogo:print</b><br><i></i></blockquote>  
+<img src="https://snp-mediaportal.qbank.se/assets/deployedFiles/0dd5f7539ef187524017cfb9facbb79c.png" alt="redBlackLogo" width = 350>  
+<blockquote><b>Executing step_documentFlag:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_stepDocumentGate:if</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_webpageFlag:prompt</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_webpageGate:if</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_extractUrls:prompt</b><br><i>https://www.spglobal.com/en/research-insights/special-reports/look-forward/data-center-frontiers/saudi-arabia-data-center-market</i></blockquote>  
+<blockquote><b>Executing step_webPageLoop:foreach</b><br><i>https://www.spglobal.com/en/research-insights/special-reports/look-forward/data-center-frontiers/saudi-arabia-data-center-market</i></blockquote>  
+<blockquote><b>Executing step_webPageRead:webpage</b><br><i><!DOCTYPE HTML>
+
+   The Saudi Arabia data center market: A catalyst for economic innovation | S&P Global
+   
+
+<a href="#skipToContent">
+   Skip to Content
+	</a>
+<a href="#skipToMenu">
+   Skip to Menu
+	</a>
+<a href="#skipToFooter">
+   Skip to Footer
+	</a>
+
+<a href="https://www.spglobal.com/en">
+
+</a>
+
+Explore S&P Global
+
+Search
+
+EN
+
+<a href="/zh">
+   中文 (Chinese)
+   </a>
+
+<a...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_webPageContext:data</b><br><i>{
+"webPageUrl" : "https://www.spglobal.com/en/research-insights/special-reports/look-forward/data-center-frontiers/saudi-arabia-data-center-market",
+"webPageContent" : """<!DOCTYPE HTML>
+
+   The Saudi Arabia data center market: A catalyst for economic innovation | S&P Global
+   
+
+<a href="#skipToContent">
+   Skip to Content
+	</a>
+<a href="#skipToMenu">
+   Skip to Menu
+	</a>
+<a href="#skipToFooter">
+   Skip to Footer
+	</a>
+
+<a href="https://www.spglobal.com/en">
+
+</a>
+
+Explore S&P Global
+
+Search
+
+EN
+
+<a href="/zh">
+   中文...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slideCount:prompt</b><br><i>5</i></blockquote>  
+<blockquote><b>Executing step_slideCountPrint:print</b><br><i></i></blockquote>  
+<div style="margin-bottom: 20px;"><hr>Preparing to create 5 slides. Sit back (and maybe grab some coffee 🍵) while we get this ready.<br>
+<i>Tue Jan 13 2026 14:26:36 GMT+0800 (Malaysia Time)</i><br>  
+<blockquote><b>Executing step_head:data</b><br><i><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&P Global PowerPoint Generator</title>
+<script src="https://cdn.jsdelivr.net/gh/sharmizan89/PptxGenJSMBAR2.0@v.1.0.8/dist/pptxgen.bundle.js"></script>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_pptxInit:data</b><br><i>let pptx = new PptxGenJS();
+pptx.defineLayout({ name: 'S-P Global EDP 2026 16-9', width: 13.333, height: 7.5 });
+pptx.layout = 'S-P Global EDP 2026 16-9';
+
+pptx.theme = {
+  headFontFace: "Arial",
+  bodyFontFace: "Arial",
+  themeColors: ["000000", "FFFFFF", "404040", "DCDCDC", "D6002A", "000000", "C2C2C2", "9E8D73", "C7DAE0", "EDF86F", "0F82AF", "0D6E95"],
+};
+
+const colors = {
+   ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_sustainable1Check:if</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_otherLayouts:data</b><br><i>pptx.defineSlideMaster({
+    title: "Content - no subtitle",
+    background: { color: colors.white },
+    margin: [0, 0, 0, 0],
+    objects: [
+        // Logo and fixed text
+        {...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_heroldCheck:if</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_heroldText:data</b><br><i>{
+  "energy": {
+  "text": "© 2026 by S&P Global Inc. All rights reserved.\\n\\nS&P Global, the S&P Global logo, S&P Global Energy, and Platts are trademarks of S&P Global Inc. Permission for any commercial use of these trademarks must be obtained in writing from S&P Global Inc.\\n\\nYou may view...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_energyDisclaimerText:jmespath</b><br><i>© 2026 by S&P Global Inc. All rights reserved.\n\nS&P Global, the S&P Global logo, S&P Global Energy, and Platts are trademarks of S&P Global Inc. Permission for any commercial use of these trademarks must be obtained in writing from S&P Global Inc.\n\nYou may view or otherwise use the information, prices,...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_heroldDisclaimer:data</b><br><i>pptx.defineSlideMaster({
+    title: "Companies &amp; Transactions",
+    background: { color: colors.white },
+    objects: [
+        // Logo and fixed text
+        { image: { path: redBlackLogo, x: 0.61, y: 7.00, w:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_energyDisclaimer:data</b><br><i>pptx.defineSlideMaster({
+    title: "Energy",
+    background: { color: colors.white },
+    objects: [
+        // Logo and fixed text
+        { image: { path: redBlackLogo, x: 0.61, y: 7.00, w: 0.83, h:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_disclaimerLayout:data</b><br><i>pptx.defineSlideMaster({
+    title: "Companies &amp; Transactions",
+    background: { color: colors.white },
+    objects: [
+        // Logo and fixed text
+        { image: { path: redBlackLogo, x: 0.61, y: 7.00, w:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_templates:data</b><br><i>[
+{
+    "template": "Title White - reports and presentations (hIHS)",
+    "instructions": "Provide a URL for the <Banner Image>. Provide a [Presentation Title] (min 3 / !!! max 6 tokens !!!). Provide a [Presentation Subtitle] (max 7 tokens). Provide author information in the format 'First and...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_templateList:jmespath</b><br><i>[
+  {
+    "template": "Title White - reports and presentations (hIHS)",
+    "instructions": "Provide a URL for the <Banner Image>. Provide a [Presentation Title] (min 3 / !!! max 6 tokens !!!). Provide a [Presentation Subtitle] (max 7 tokens). Provide author information in the format...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_partnerPlan:prompt</b><br><i># PowerPoint Presentation Plan: Saudi Arabia Data Center Market Analysis
+
+## **Presentation Title:** 
+"Saudi Arabia's Data Center Revolution: Powering Vision 2030's Digital Transformation"
+
+**Keywords for title slide image:** Saudi Arabia, data center, digital transformation, Vision 2030, technology infrastructure, economic diversification, cloud computing, artificial intelligence, hyperscale facilities, investment opportunities
+
+---
+
+## **Team Instructions & Information Gathering Requirements:**
+
+### **Slide Structure (5 slides total):**
+
+**Slide 1: Title Slide**
+- Use the presentation title above
+- Include date and S&P Global branding
+- Add the 10 keywords in presentation notes for image selection
+
+**Slide 2: Executive Summary - Market Transformation at Scale**
+- **Key Message:** Saudi Arabia's data center market is experiencing explosive growth as a cornerstone of economic...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_listSlideNumbers:eval</b><br><i>[1, 2, 3, 4, 5]</i></blockquote>  
+<blockquote><b>Executing step_slideLoop:foreach</b><br><i>[1, 2, 3, 4, 5]</i></blockquote>  
+<blockquote><b>Executing step_slidePlan:prompt</b><br><i>[
+{
+"slideNumber": 1,
+"template": "Title White - reports and presentations (hIHS)",
+"content": "let slide1 = pptx.addSlide({ masterName: \"Title White - reports and presentations (hIHS)\" });\n\n// Add content to placeholders\nslide1.addText(\"Saudi Arabia's Data Center Revolution\", { placeholder: \"title\" });\nslide1.addText(\"Powering Vision 2030's Digital Transformation\", { placeholder: \"subtitle\" });\nslide1.addText(\"Mizan...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_summary:prompt</b><br><i>This slide introduces Saudi Arabia's data center market as a vital part of Vision 2030's digital transformation, highlighting rapid growth and strategic expansion. It emphasizes the country's goal to become a regional digital hub through government initiatives and international collaborations.</i></blockquote>  
+<blockquote><b>Executing step_slideTemplate:prompt</b><br><i>Title White - reports and presentations (hIHS)</i></blockquote>  
+<blockquote><b>Executing step_printSlideUpdate:print</b><br><i></i></blockquote>  
+<div style="margin-bottom: 20px;"><hr><h5>Slide: 1: Title White - reports and presentations (hIHS)</h5><blockquote><sub>[This slide introduces Saudi Arabia's data center market as a vital part of Vision 2030's digital transformation, highlighting rapid growth and strategic expansion. It emphasizes the country's goal to become a regional digital hub through government initiatives and international collaborations.]</sub></blockquote>  
+<blockquote><b>Executing step_slideCode:jmespath</b><br><i>let slide<slideNumber> = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide<slideNumber>.addText("[Presentation title]", { placeholder: "title" });
+slide<slideNumber>.addText("[Presentation subtitle]", { placeholder: "subtitle" });
+slide<slideNumber>.addText("[First and Last Name / Department / Job Title]", { placeholder: "authorInfo" });
+slide<slideNumber>.addText("[Report type]", { placeholder: "reportType" });
+slide<slideNumber>.addText("[Optional placeholder]", { placeholder: "optionalPlaceholder" });
+slide<slideNumber>.addText("January 13,...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_imageTF:eval</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_imageSelect:spark</b><br><i>Fetching Spark 41714: spGlobalImagesForPPT
+You can only use <allowed images> ... do not use placeholders ... do not use unsplash!!! only <allowed images>.
+
+calling an image or icon anywhere like: https://s3.amazonaws.com/sprintive-static-assets/images/icons/png/48px/242424/icon-11.png will result in a cors violation and break the code.
+
+Use allowed images for icons and image. Make sure not to modify <allowed images> urls...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartTF:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_chartInstructions:data</b><br><i>{ "True" : """## CRITICAL EXECUTION RULES FOR S&P GLOBAL CHART GENERATION
+
+### ABSOLUTE REQUIREMENTS - NO EXCEPTIONS
+
+You must use given data ... do not derive your own data.
+
+#### 1. MANDATORY CODE STRUCTURE
+Every response MUST follow this exact pattern:
+
+// 1. CHART POSITIONING (adjustable variables)
+const chartPosition_slide<slideNumber> = {
+    x:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartPrompt:jmespath</b><br><i>No Charts Required. Do not Generate a Chart for this Slide.</i></blockquote>  
+<blockquote><b>Executing step_generateSlide:prompt</b><br><i>let slide1 = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide1.addText("Saudi Arabia's Data Center Revolution", { placeholder: "title" });
+slide1.addText("Powering Vision 2030's Digital Transformation", { placeholder: "subtitle" });
+slide1.addText("Mizan Bin abdul rahman / SGA EDITORIAL 1 / LEAD EDITOR", { placeholder: "authorInfo" });
+slide1.addText("STRATEGIC REPORT", { placeholder: "reportType" });
+slide1.addText("January 13, 2026", { placeholder: "date" });
+
+// Add main image (overlay real image on top of placeholder here using imageUrl)
+slide1.addImage({ path: "https://snp-mediaportal.qbank.se/assets/deployedFiles/c7ca8c7d873a5b91534e3755925f5d7c.jpg", x: ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_soFar:data</b><br><i>
+
+slide_1:
+"""
+[
+{
+"slideNumber": 1,
+"template": "Title White - reports and presentations (hIHS)",
+"content": "let slide1 = pptx.addSlide({ masterName: \"Title White - reports and presentations (hIHS)\" });\n\n// Add content to placeholders\nslide1.addText(\"Saudi Arabia's Data Center Revolution\", { placeholder: \"title\" });\nslide1.addText(\"Powering Vision 2030's Digital Transformation\", { placeholder: \"subtitle\" });\nslide1.addText(\"Mizan Bin abdul rahman / SGA EDITORIAL 1 /...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_accumulateSlides:data</b><br><i>
+
+let slide1 = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide1.addText("Saudi Arabia's Data Center Revolution", { placeholder: "title" });
+slide1.addText("Powering Vision 2030's Digital Transformation", { placeholder: "subtitle" });
+slide1.addText("Mizan Bin abdul rahman / SGA EDITORIAL 1 / LEAD EDITOR", { placeholder: "authorInfo" });
+slide1.addText("STRATEGIC REPORT", { placeholder:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slidePlan:prompt</b><br><i>[
+{
+"slideNumber": 2,
+"template": "Content + Chart/Table 1",
+"content": "let slide2 = pptx.addSlide({ masterName: \"Content + Chart/Table 1\" });\n\n// Add slide number\nslide2.addText(\"2\", { placeholder: \"slideNumber\" });\n\n// Add content to placeholders\nslide2.addText(\"Market Transformation at Scale\", { placeholder: \"headline\" });\nslide2.addText(\"Explosive growth driving economic diversification\", { placeholder: \"subheadline\" });\nslide2.addText(\"Saudi Arabia's data center market is experiencing unprecedented expansion as a cornerstone of Vision 2030's economic diversification strategy. The sector demonstrates remarkable momentum with a 29% compound annual growth rate projected through 2030, positioning the kingdom as a regional digital transformation leader.\\n\\nCurrent market capacity stands at 222 MW of IT power as of Q1 2025, with ambitious plans for an additional 760 MW expansion by 2030 - more than tripling existing capacity. This growth trajectory is supported by dramatic increases in foreign direct investment, which surged from $5...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_summary:prompt</b><br><i>Saudi Arabia's data center market is experiencing rapid growth, with a projected 29% CAGR and capacity tripling by 2030, driven by Vision 2030's economic diversification. The surge in foreign direct investment from $5.3 billion to...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slideTemplate:prompt</b><br><i>Content + Chart/Table 1</i></blockquote>  
+<blockquote><b>Executing step_printSlideUpdate:print</b><br><i></i></blockquote>  
+<div style="margin-bottom: 20px;"><hr><h5>Slide: 2: Content + Chart/Table 1</h5><blockquote><sub>[Saudi Arabia's data center market is experiencing rapid growth, with a projected 29% CAGR and capacity tripling by 2030, driven by Vision 2030's economic diversification. The surge in foreign direct investment from $5.3 billion to $31 billion underscores international confidence and positions the kingdom as a regional digital hub.]</sub></blockquote>  
+<blockquote><b>Executing step_slideCode:jmespath</b><br><i>let slide<slideNumber> = pptx.addSlide({ masterName: "Content + Chart/Table 1" });
+
+// Add slide number
+slide<slideNumber>.addText("<slideNumber>", { placeholder: "slideNumber" });
+
+// Add content to placeholders
+slide<slideNumber>.addText("[Headline - one line max]", { placeholder: "headline" });
+slide<slideNumber>.addText("[Subheadline - one line max]", { placeholder: "subheadline" });
+slide<slideNumber>.addText("[Content]", { placeholder: "content" });
+
+// Right panel chart
+slide<slideNumber>.addText("[chartData]", { placeholder: "chartData" });
+
+
+slide<slideNumber>.addText("[Section name (optional)...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_imageTF:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_imageSelect:spark</b><br><i>Fetching Spark 41714: spGlobalImagesForPPT
+!!!Images are not allowed!!!
+
+Do not attempt to add any images! No placeholders or public images.  
+</i></blockquote>  
+<blockquote><b>Executing step_chartTF:eval</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_chartInstructions:data</b><br><i>{ "True" : """## CRITICAL EXECUTION RULES FOR S&P GLOBAL CHART GENERATION
+
+### ABSOLUTE REQUIREMENTS - NO EXCEPTIONS
+
+You must use given data ... do not derive your own data.
+
+#### 1. MANDATORY CODE STRUCTURE
+Every response MUST follow this exact pattern:
+
+// 1. CHART POSITIONING (adjustable variables)
+const chartPosition_slide<slideNumber> = {
+    x:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartPrompt:jmespath</b><br><i>## CRITICAL EXECUTION RULES FOR S&P GLOBAL CHART GENERATION
+
+### ABSOLUTE REQUIREMENTS - NO EXCEPTIONS
+
+You must use given data ... do not derive your own data.
+
+#### 1. MANDATORY CODE STRUCTURE
+Every response MUST follow this exact pattern:
+
+// 1. CHART POSITIONING (adjustable variables)
+const chartPosition_slide<slideNumber> = {
+    x: #.#,  ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_generateSlide:prompt</b><br><i>let slide2 = pptx.addSlide({ masterName: "Content + Chart/Table 1" });
+
+// Add slide number
+slide2.addText("2", { placeholder: "slideNumber" });
+
+// Add content to placeholders
+slide2.addText("Market Transformation at Scale", { placeholder: "headline" });
+slide2.addText("Explosive growth driving economic diversification", { placeholder: "subheadline" });
+slide2.addText(`Saudi Arabia's data center market is experiencing unprecedented expansion as a cornerstone of Vision 2030's economic diversification strategy. The sector demonstrates remarkable momentum with a 29% compound annual growth rate projected through 2030, positioning the kingdom as a regional digital transformation leader.
+
+Current market capacity stands at 222 MW of IT power as of Q1 2025, with ambitious plans for an additional 760 MW expansion by 2030 - more than tripling existing capacity. This growth trajectory is supported by dramatic increases in foreign direct investment, which surged from $5.3 billion in 2020 to $31...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_soFar:data</b><br><i>
+
+slide_1:
+"""
+[
+{
+"slideNumber": 1,
+"template": "Title White - reports and presentations (hIHS)",
+"content": "let slide1 = pptx.addSlide({ masterName: \"Title White - reports and presentations (hIHS)\" });\n\n// Add content to placeholders\nslide1.addText(\"Saudi Arabia's Data Center Revolution\", { placeholder: \"title\" });\nslide1.addText(\"Powering Vision 2030's Digital Transformation\", { placeholder: \"subtitle\" });\nslide1.addText(\"Mizan Bin abdul rahman / SGA EDITORIAL 1 /...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_accumulateSlides:data</b><br><i>
+
+let slide1 = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide1.addText("Saudi Arabia's Data Center Revolution", { placeholder: "title" });
+slide1.addText("Powering Vision 2030's Digital Transformation", { placeholder: "subtitle" });
+slide1.addText("Mizan Bin abdul rahman / SGA EDITORIAL 1 / LEAD EDITOR", { placeholder: "authorInfo" });
+slide1.addText("STRATEGIC REPORT", { placeholder:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slidePlan:prompt</b><br><i>[
+{
+"slideNumber": 3,
+"template": "Icons 3 Columns Vertical",
+"content": "let slide3 = pptx.addSlide({ masterName: \"Icons 3 Columns Vertical\" });\n\n// Add slide number\nslide3.addText(\"3\", { placeholder: \"slideNumber\" });\n\n// Add content to placeholders\nslide3.addText(\"Strategic Drivers Accelerating Growth\", { placeholder: \"headline\" });\nslide3.addText(\"Vision 2030 and global partnerships fuel expansion\", { placeholder: \"subheadline\" });\n\n// Column 1 - Vision 2030\nslide3.addImage({ path: \"Government policy icon representing Vision 2030 strategic planning and economic diversification\", x: 0.61, y: 1.38, w: 12...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_summary:prompt</b><br><i>This slide highlights the strategic drivers fueling Saudi Arabia's data center growth, including Vision 2030 reforms, major cloud partnerships, and the Humain AI initiative. These catalysts work together to position Saudi Arabia as a global leader in digital infrastructure and artificial intelligence...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slideTemplate:prompt</b><br><i>Icons 3 Columns Vertical</i></blockquote>  
+<blockquote><b>Executing step_printSlideUpdate:print</b><br><i></i></blockquote>  
+<div style="margin-bottom: 20px;"><hr><h5>Slide: 3: Icons 3 Columns Vertical</h5><blockquote><sub>[This slide highlights the strategic drivers fueling Saudi Arabia's data center growth, including Vision 2030 reforms, major cloud partnerships, and the Humain AI initiative. These catalysts work together to position Saudi Arabia as a global leader in digital infrastructure and artificial intelligence.]</sub></blockquote>  
+<blockquote><b>Executing step_slideCode:jmespath</b><br><i>let slide<slideNumber> = pptx.addSlide({ masterName: "Icons 3 Columns Vertical" });
+
+// Add slide number
+slide<slideNumber>.addText("<slideNumber>", { placeholder: "slideNumber" });
+
+// Add content to placeholders
+slide<slideNumber>.addText("[Headline - one line max]", { placeholder: "headline" });
+slide<slideNumber>.addText("[Subheadline - one line max]", { placeholder: "subheadline" });
+
+// Column 1
+// NEVER adjust image sizing or position - use fixed dimensions
+//overlay real...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_imageTF:eval</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_imageSelect:spark</b><br><i>Fetching Spark 41714: spGlobalImagesForPPT
+You can only use <allowed images> ... do not use placeholders ... do not use unsplash!!! only <allowed images>.
+
+calling an image or icon anywhere like: https://s3.amazonaws.com/sprintive-static-assets/images/icons/png/48px/242424/icon-11.png will result in a cors violation and break the code.
+
+Use allowed images for icons and image. Make sure not to modify <allowed images> urls...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartTF:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_chartInstructions:data</b><br><i>{ "True" : """## CRITICAL EXECUTION RULES FOR S&P GLOBAL CHART GENERATION
+
+### ABSOLUTE REQUIREMENTS - NO EXCEPTIONS
+
+You must use given data ... do not derive your own data.
+
+#### 1. MANDATORY CODE STRUCTURE
+Every response MUST follow this exact pattern:
+
+// 1. CHART POSITIONING (adjustable variables)
+const chartPosition_slide<slideNumber> = {
+    x:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartPrompt:jmespath</b><br><i>No Charts Required. Do not Generate a Chart for this Slide.</i></blockquote>  
+<blockquote><b>Executing step_generateSlide:prompt</b><br><i>let slide3 = pptx.addSlide({ masterName: "Icons 3 Columns Vertical" });
+
+// Add slide number
+slide3.addText("3", { placeholder: "slideNumber" });
+
+// Add content to placeholders
+slide3.addText("Strategic Drivers Accelerating Growth", { placeholder: "headline" });
+slide3.addText("Vision 2030 and global partnerships fuel expansion", { placeholder: "subheadline" });
+
+// Column 1 - Vision 2030
+slide3.addImage({ path: "https://snp-mediaportal.qbank.se/assets/deployedFiles/7c7f60733bdda9a48659e167633dc885.jpg", x: 0.61, y: 1.38, w: 12.00, h...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_soFar:data</b><br><i>
+
+slide_1:
+"""
+[
+{
+"slideNumber": 1,
+"template": "Title White - reports and presentations (hIHS)",
+"content": "let slide1 = pptx.addSlide({ masterName: \"Title White - reports and presentations (hIHS)\" });\n\n// Add content to placeholders\nslide1.addText(\"Saudi Arabia's Data Center Revolution\", { placeholder: \"title\" });\nslide1.addText(\"Powering Vision 2030's Digital Transformation\", { placeholder: \"subtitle\" });\nslide1.addText(\"Mizan Bin abdul rahman / SGA EDITORIAL 1 /...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_accumulateSlides:data</b><br><i>
+
+let slide1 = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide1.addText("Saudi Arabia's Data Center Revolution", { placeholder: "title" });
+slide1.addText("Powering Vision 2030's Digital Transformation", { placeholder: "subtitle" });
+slide1.addText("Mizan Bin abdul rahman / SGA EDITORIAL 1 / LEAD EDITOR", { placeholder: "authorInfo" });
+slide1.addText("STRATEGIC REPORT", { placeholder:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slidePlan:prompt</b><br><i>[
+{
+"slideNumber": 4,
+"template": "Content 4 Columns",
+"content": "let slide4 = pptx.addSlide({ masterName: \"Content 4 Columns\" });\n\n// Add slide number\nslide4.addText(\"4\", { placeholder: \"slideNumber\" });\n\n// Add content to placeholders\nslide4.addText(\"Competitive Landscape and Market Leaders\", { placeholder: \"headline\" });\nslide4.addText(\"Established players and new entrants positioning for growth\", { placeholder: \"subheadline\" });\n\n// Column 1 - Established Players\nslide4.addText(\"Established Leaders\", { placeholder: \"subtitle1\" });\nslide4.addText(\"Center3 (S...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_summary:prompt</b><br><i>This slide outlines the evolving competitive landscape of the Saudi Arabia data center market, highlighting established players, emerging competitors, and disruptive projects like Humain. It emphasizes the strategic geographic hubs driving regional development and the market's rapid growth potential.</i></blockquote>  
+<blockquote><b>Executing step_slideTemplate:prompt</b><br><i>Content 4 Columns</i></blockquote>  
+<blockquote><b>Executing step_printSlideUpdate:print</b><br><i></i></blockquote>  
+<div style="margin-bottom: 20px;"><hr><h5>Slide: 4: Content 4 Columns</h5><blockquote><sub>[This slide outlines the evolving competitive landscape of the Saudi Arabia data center market, highlighting established players, emerging competitors, and disruptive projects like Humain. It emphasizes the strategic geographic hubs driving regional development and the market's rapid growth potential.]</sub></blockquote>  
+<blockquote><b>Executing step_slideCode:jmespath</b><br><i>let slide<slideNumber> = pptx.addSlide({ masterName: "Content 4 Columns" });
+
+// Add slide number
+slide<slideNumber>.addText("<slideNumber>", { placeholder: "slideNumber" });
+
+// Add content to placeholders
+slide<slideNumber>.addText("[Headline - one line max]", { placeholder: "headline" });
+slide<slideNumber>.addText("[Subheadline - one line max]", { placeholder: "subheadline" });
+
+// Column 1
+slide<slideNumber>.addText("[subtitle1]", { placeholder: "subtitle1" });
+slide<slideNumber>.addText("[content1]", { placeholder: "content1" });
+
+// Column 2
+slide<slideNumber>.addText("[subtitle2]", { placeholder:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_imageTF:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_imageSelect:spark</b><br><i>Fetching Spark 41714: spGlobalImagesForPPT
+!!!Images are not allowed!!!
+
+Do not attempt to add any images! No placeholders or public images.  
+</i></blockquote>  
+<blockquote><b>Executing step_chartTF:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_chartInstructions:data</b><br><i>{ "True" : """## CRITICAL EXECUTION RULES FOR S&P GLOBAL CHART GENERATION
+
+### ABSOLUTE REQUIREMENTS - NO EXCEPTIONS
+
+You must use given data ... do not derive your own data.
+
+#### 1. MANDATORY CODE STRUCTURE
+Every response MUST follow this exact pattern:
+
+// 1. CHART POSITIONING (adjustable variables)
+const chartPosition_slide<slideNumber> = {
+    x:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartPrompt:jmespath</b><br><i>No Charts Required. Do not Generate a Chart for this Slide.</i></blockquote>  
+<blockquote><b>Executing step_generateSlide:prompt</b><br><i>let slide4 = pptx.addSlide({ masterName: "Content 4 Columns" });
+
+// Add slide number
+slide4.addText("4", { placeholder: "slideNumber" });
+
+// Add content to placeholders
+slide4.addText("Competitive Landscape and Market Leaders", { placeholder: "headline" });
+slide4.addText("Established players and new entrants positioning for growth", { placeholder: "subheadline" });
+
+// Column 1 - Established Players
+slide4.addText("Established Leaders", { placeholder: "subtitle1" });
+slide4.addText("Center3 (STC affiliate), Damac Data Centers, and Quantum Switch Tamasuk lead current market with proven infrastructure and local partnerships.", { placeholder: "content1" });
+
+// Column 2 - Emerging Players
+slide4.addText("Emerging Competitors", { placeholder: "subtitle2" });
+slide4.addText("DataVolt, ZeroPoint DC, and Gulf Data Hub represent new generation of providers targeting hyperscale opportunities.", { placeholder: "content2" });
+
+// Column 3 - Game Changer...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_soFar:data</b><br><i>
+
+slide_1:
+"""
+[
+{
+"slideNumber": 1,
+"template": "Title White - reports and presentations (hIHS)",
+"content": "let slide1 = pptx.addSlide({ masterName: \"Title White - reports and presentations (hIHS)\" });\n\n// Add content to placeholders\nslide1.addText(\"Saudi Arabia's Data Center Revolution\", { placeholder: \"title\" });\nslide1.addText(\"Powering Vision 2030's Digital Transformation\", { placeholder: \"subtitle\" });\nslide1.addText(\"Mizan Bin abdul rahman / SGA EDITORIAL 1 /...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_accumulateSlides:data</b><br><i>
+
+let slide1 = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide1.addText("Saudi Arabia's Data Center Revolution", { placeholder: "title" });
+slide1.addText("Powering Vision 2030's Digital Transformation", { placeholder: "subtitle" });
+slide1.addText("Mizan Bin abdul rahman / SGA EDITORIAL 1 / LEAD EDITOR", { placeholder: "authorInfo" });
+slide1.addText("STRATEGIC REPORT", { placeholder:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slidePlan:prompt</b><br><i>[
+{
+"slideNumber": 5,
+"template": "Two Content + Subtitles",
+"content": "let slide5 = pptx.addSlide({ masterName: \"Two Content + Subtitles\" });\n\n// Add slide number\nslide5.addText(\"5\", { placeholder: \"slideNumber\" });\n\n// Add main content\nslide5.addText(\"Challenges and Future Outlook\", { placeholder: \"headline\" });\nslide5.addText(\"Addressing constraints while leveraging competitive advantages\", { placeholder: \"subheadline\" });\nslide5.addText(\"Saudi Arabia Data Center Market / January 2026\", { placeholder: \"footer\" });\nslide5.addText(\"Key Implementation Challenges\", { placeholder: \"leftSubtitle\" });\nslide5.addText(\"Despite strong market fundamentals, sustainable growth requires addressing critical infrastructure constraints. Water scarcity presents...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_summary:prompt</b><br><i>This slide discusses the challenges and future outlook of Saudi Arabia's data center market, highlighting infrastructure constraints like water scarcity and supply chain issues. It also emphasizes the country's competitive advantages, including abundant energy resources, strategic location, and government support, which position it...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_slideTemplate:prompt</b><br><i>Two Content + Subtitles</i></blockquote>  
+<blockquote><b>Executing step_printSlideUpdate:print</b><br><i></i></blockquote>  
+<div style="margin-bottom: 20px;"><hr><h5>Slide: 5: Two Content + Subtitles</h5><blockquote><sub>[This slide discusses the challenges and future outlook of Saudi Arabia's data center market, highlighting infrastructure constraints like water scarcity and supply chain issues. It also emphasizes the country's competitive advantages, including abundant energy resources, strategic location, and government support, which position it for sustained growth despite these challenges.]</sub></blockquote>  
+<blockquote><b>Executing step_slideCode:jmespath</b><br><i>let slide<slideNumber> = pptx.addSlide({ masterName: "Two Content + Subtitles" });
+
+// Add slide number
+slide<slideNumber>.addText("<slideNumber>", { placeholder: "slideNumber" });
+
+// Add main content
+slide<slideNumber>.addText("[Headline - one line max]", { placeholder: "headline" });
+slide<slideNumber>.addText("[Subheadline - one line max]", { placeholder: "subheadline" });
+slide<slideNumber>.addText("[Section name (optional) / Presentation title / Month Year]", { placeholder: "footer" });
+slide<slideNumber>.addText("[Left subtitle]", {...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_imageTF:eval</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_imageSelect:spark</b><br><i>Fetching Spark 41714: spGlobalImagesForPPT
+You can only use <allowed images> ... do not use placeholders ... do not use unsplash!!! only <allowed images>.
+
+calling an image or icon anywhere like: https://s3.amazonaws.com/sprintive-static-assets/images/icons/png/48px/242424/icon-11.png will result in a cors violation and break the code.
+
+Use allowed images for icons and image. Make sure not to modify <allowed images> urls...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartTF:eval</b><br><i>False</i></blockquote>  
+<blockquote><b>Executing step_chartInstructions:data</b><br><i>{ "True" : """## CRITICAL EXECUTION RULES FOR S&P GLOBAL CHART GENERATION
+
+### ABSOLUTE REQUIREMENTS - NO EXCEPTIONS
+
+You must use given data ... do not derive your own data.
+
+#### 1. MANDATORY CODE STRUCTURE
+Every response MUST follow this exact pattern:
+
+// 1. CHART POSITIONING (adjustable variables)
+const chartPosition_slide<slideNumber> = {
+    x:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_chartPrompt:jmespath</b><br><i>No Charts Required. Do not Generate a Chart for this Slide.</i></blockquote>  
+<blockquote><b>Executing step_generateSlide:prompt</b><br><i>let slide5 = pptx.addSlide({ masterName: "Two Content + Subtitles" });
+
+// Add slide number
+slide5.addText("5", { placeholder: "slideNumber" });
+
+// Add main content
+slide5.addText("Challenges and Future Outlook", { placeholder: "headline" });
+slide5.addText("Addressing constraints while leveraging competitive advantages", { placeholder: "subheadline" });
+slide5.addText("Saudi Arabia Data Center Market / January 2026", { placeholder: "footer" });
+slide5.addText("Key Implementation Challenges", { placeholder: "leftSubtitle" });
+slide5.addText(`Despite strong market fundamentals, sustainable growth requires addressing critical infrastructure constraints. Water scarcity presents the most significant challenge, with data centers requiring 15 billion liters in 2024 and cooling demands intensified by the hot climate. Supply chain constraints and construction expertise gaps further complicate rapid scaling, while Public Investment Fund approval requirements add regulatory complexity for large projects. These challenges demand innovative solutions including advanced cooling technologies, local workforce development, and streamlined approval processes to maintain growth momentum.`, { placeholder: "leftContent" });
+slide5.addText("Strategic Competitive Advantages", { placeholder: "rightSubtitle" });
+slide5.addText(`The kingdom's competitive positioning remains exceptionally strong with abundant energy resources exceeding 400 TWh capacity, providing cost-effective power for energy-intensive data center operations. Strategic geographic location offers optimal connectivity between Europe, Asia, and Africa, while government incentives and reduced regulatory barriers create an attractive investment environment. Vision 2030's continued policy support, combined with major international partnerships and the transformational Humain project, positions Saudi...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_soFar:data</b><br><i>
+
+slide_1:
+"""
+[
+{
+"slideNumber": 1,
+"template": "Title White - reports and presentations (hIHS)",
+"content": "let slide1 = pptx.addSlide({ masterName: \"Title White - reports and presentations (hIHS)\" });\n\n// Add content to placeholders\nslide1.addText(\"Saudi Arabia's Data Center Revolution\", { placeholder: \"title\" });\nslide1.addText(\"Powering Vision 2030's Digital Transformation\", { placeholder: \"subtitle\" });\nslide1.addText(\"Mizan Bin abdul rahman / SGA EDITORIAL 1 /...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_accumulateSlides:data</b><br><i>
+
+let slide1 = pptx.addSlide({ masterName: "Title White - reports and presentations (hIHS)" });
+
+// Add content to placeholders
+slide1.addText("Saudi Arabia's Data Center Revolution", { placeholder: "title" });
+slide1.addText("Powering Vision 2030's Digital Transformation", { placeholder: "subtitle" });
+slide1.addText("Mizan Bin abdul rahman / SGA EDITORIAL 1 / LEAD EDITOR", { placeholder: "authorInfo" });
+slide1.addText("STRATEGIC REPORT", { placeholder:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_bestPracticesSlide:data</b><br><i>let practiceSlideNumber = 5 + 1;
+
+let slidePractice = pptx.addSlide({ masterName: "Blank" });
+
+slidePractice.addText(practiceSlideNumber, { placeholder: "slideNumber" });
+
+slidePractice.addText([ { text: 'Best practices for creating PPTs using the PPT Generator Spark', options: { fontFace: 'Arial', fontSize: 24, color: '000000', align: 'left', valign: 'top' } }], { x: 0.62, y: 0.38, w: 12.10, h:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_contactUsSlide:data</b><br><i>let contactSlideNumber = 5 + 2;
+
+let slideContact = pptx.addSlide({ masterName: "Contact us" });
+
+slideContact.addText(contactSlideNumber, { placeholder: "slideNumber" });
+
+slideContact.addText([ { text: 'Contact us', options: { fontFace: 'Arial', fontSize: 36, color: 'FFFFFF', align: 'left', valign: 'top' } }], { x: 0.62, y: 0.38, w: 5.50, h: 0.50, margin: 0 });
+
+slideContact.addText([ { text: 'Primary...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_resourcesSlide:data</b><br><i>let resourcesSlideNumber = 5 + 3;
+
+let slideResources = pptx.addSlide({ masterName: "Blank" });
+
+slideResources.addText(resourcesSlideNumber, { placeholder: "slideNumber" });
+
+slideResources.addText(
+  [
+    { text: 'Resources for authors (DELETE BEFORE PUBLISHING/PRESENTING)', options: { fontFace: 'Arial', fontSize: 24, color: '000000' } },
+  ],
+  { x: 0.62,
+  y: 0.38,
+  w:...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_heroldDisclaimerCheck:if</b><br><i>True</i></blockquote>  
+<blockquote><b>Executing step_finalDisclaimerSlide:data</b><br><i>let disclaimerSlideNumber = 5 + 3;
+
+let slideDisclaimer = pptx.addSlide({ masterName: "Companies &amp; Transactions" });
+
+slideDisclaimer.addText(disclaimerSlideNumber, { placeholder: "slideNumber" });
+
+pptx.defineSlideMaster({
+    title: "~    ",
+    background: { color: colors.white },
+    objects: [
+        {
+  ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_assembleHTML:data</b><br><i><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S&P Global PowerPoint Generator</title>
+<script src="https://cdn.jsdelivr.net/gh/sharmizan89/PptxGenJSMBAR2.0@v.1.0.8/dist/pptxgen.bundle.js"></script>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  ...(trimmed)</i></blockquote>  
+<blockquote><b>Executing step_download:download</b><br><i>https://sparkassistfiles.s3.amazonaws.com/sparkfiles/user/html-20260113063127.html?AWSAccessKeyId=AKIAYDWHTHQ3NYW5JKBP&Signature=Hj5Twn4LAtHclGkDO0hFlE%2F3XW4%3D&Expires=1768458687</i></blockquote>  
+<blockquote><b>Executing step_finalMessage:print</b><br><i></i></blockquote>  
+<h3>✅ Your PowerPoint is ready!</h3>
+<p><strong><a href="https://sparkassistfiles.s3.amazonaws.com/sparkfiles/user/html-20260113063127.html?AWSAccessKeyId=AKIAYDWHTHQ3NYW5JKBP&Signature=Hj5Twn4LAtHclGkDO0hFlE%2F3XW4%3D&Expires=1768458687">📥 Download HTML File</a></strong></p>
+<p><em>How to download your PowerPoint:</em></p>
+<ol>
+<li>Click the download link above.</li>
+<li>Open the downloaded HTML file in your browser.</li>
+<li>Click the "Download PowerPoint" button to download your PowerPoint.</li>
+</ol>
+<p>Got feedback? Contact <a href="mailto:mizan.binabdulrahman@spglobal.com">mizan.binabdulrahman@spglobal.com</a>.</p>
+</div>

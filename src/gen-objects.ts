@@ -72,7 +72,11 @@ export function createSlideMaster(props: SlideMasterProps, target: SlideLayout):
 			else if (MASTER_OBJECTS[key] && key === 'image') addImageDefinition(tgt, object[key])
 			else if (MASTER_OBJECTS[key] && key === 'line') addShapeDefinition(tgt, SHAPE_TYPE.LINE, object[key])
 			else if (MASTER_OBJECTS[key] && key === 'rect') addShapeDefinition(tgt, SHAPE_TYPE.RECTANGLE, object[key])
-			else if (MASTER_OBJECTS[key] && key === 'text') addTextDefinition(tgt, [{ text: object[key].text }], object[key].options, false)
+			else if (MASTER_OBJECTS[key] && key === 'text') {
+    			// Support both string and array of text runs for slide master text objects
+    			const textContent = Array.isArray(object[key].text) ? object[key].text : [{ text: object[key].text }]
+    			addTextDefinition(tgt, textContent, object[key].options, false)
+			}
 			else if (MASTER_OBJECTS[key] && key === 'placeholder') {
 				// TODO: 20180820: Check for existing `name`?
 				object[key].options.placeholder = object[key].options.name
