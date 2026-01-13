@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test v.1.0.9 - Disclaimer Text Array Fix</title>
+    <script src="https://cdn.jsdelivr.net/gh/sharmizan89/PptxGenJSMBAR2.0@v.1.0.9/dist/pptxgen.bundle.js"></script>
+</head>
+<body>
+    <h1>Test v.1.0.9 - Disclaimer Text Array Fix</h1>
+    <p>This test verifies that text arrays with per-run formatting in defineSlideMaster() work correctly.</p>
+    <button onclick="generatePptx()">Generate PPTX</button>
+    
+    <script>
+    function generatePptx() {
+        const pptx = new PptxGenJS();
+        
+        // Define a slide master with a text element using an array of text runs
+        pptx.defineSlideMaster({
+            title: 'DISCLAIMER_SLIDE',
+            background: { color: 'FFFFFF' },
+            objects: [
+                // Title
+                { text: { text: 'Companies & Transactions', options: { x: 0.5, y: 0.3, w: 9, h: 0.5, fontSize: 18, bold: true, color: '000000' } } },
+                
+                // Disclaimer text with formatted runs (the fix being tested)
+                { text: { 
+                    text: [
+                        { text: 'This document contains ', options: { fontSize: 10, color: '333333' } },
+                        { text: 'CONFIDENTIAL', options: { fontSize: 10, color: 'FF0000', bold: true } },
+                        { text: ' information. All rights reserved. ', options: { fontSize: 10, color: '333333' } },
+                        { text: '© 2026 S-P Global', options: { fontSize: 10, color: '333333', italic: true } }
+                    ],
+                    options: { x: 0.5, y: 2, w: 9, h: 1.5, valign: 'top' }
+                } },
+                
+                // Another text element using simple string (should still work)
+                { text: { text: 'Simple text without array formatting', options: { x: 0.5, y: 4, w: 9, h: 0.5, fontSize: 12, color: '666666' } } }
+            ]
+        });
+        
+        // Create a slide using the master
+        const slide1 = pptx.addSlide({ masterName: 'DISCLAIMER_SLIDE' });
+        
+        // Add another plain slide for comparison
+        const slide2 = pptx.addSlide();
+        slide2.addText('This is a regular slide', { x: 1, y: 1, w: 8, h: 1, fontSize: 24 });
+        
+        // Save the PPTX
+        pptx.writeFile({ fileName: 'test-v109-disclaimer.pptx' })
+            .then(() => {
+                alert('PPTX generated successfully!\n\nCheck the disclaimer slide - it should show:\n- "CONFIDENTIAL" in red bold\n- "© 2026 S-P Global" in italic\n\nNOT "[object Object]" strings!');
+            })
+            .catch(err => {
+                alert('Error: ' + err.message);
+                console.error(err);
+            });
+    }
+    </script>
+</body>
+</html>
