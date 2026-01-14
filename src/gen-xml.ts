@@ -388,6 +388,30 @@ function slideObjectToXml (slide: PresSlide | SlideLayout): string {
 
 			case SLIDE_OBJECT_TYPES.text:
 			case SLIDE_OBJECT_TYPES.placeholder:
+				// Handle image/picture placeholders separately
+				if (slideItemObj.options._placeholderType === 'pic') {
+					// Generate image placeholder shape XML
+					strSlideXml += '<p:sp>'
+					strSlideXml += '<p:nvSpPr>'
+					strSlideXml += `<p:cNvPr id="${idx + 2}" name="${slideItemObj.options.objectName || `Picture Placeholder ${idx}`}"/>`
+					strSlideXml += '<p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>'
+					strSlideXml += '<p:nvPr>'
+					strSlideXml += `<p:ph type="pic" idx="${slideItemObj.options._placeholderIdx || idx}"/>`
+					strSlideXml += '</p:nvPr>'
+					strSlideXml += '</p:nvSpPr>'
+					strSlideXml += '<p:spPr>'
+					strSlideXml += `<a:xfrm><a:off x="${x}" y="${y}"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm>`
+					strSlideXml += '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom>'
+					strSlideXml += '</p:spPr>'
+					strSlideXml += '<p:txBody>'
+					strSlideXml += '<a:bodyPr/>'
+					strSlideXml += '<a:lstStyle/>'
+					strSlideXml += '<a:p><a:endParaRPr lang="en-US"/></a:p>'
+					strSlideXml += '</p:txBody>'
+					strSlideXml += '</p:sp>'
+					break
+				}
+
 				// Lines can have zero cy, but text should not
 				if (!slideItemObj.options.line && cy === 0) cy = EMU * 0.3
 
@@ -569,7 +593,12 @@ function slideObjectToXml (slide: PresSlide | SlideLayout): string {
 				}
 				strSlideXml += '    </p:cNvPr>'
 				strSlideXml += '    <p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr>'
-				strSlideXml += '    <p:nvPr>' + genXmlPlaceholder(placeholderObj) + '</p:nvPr>'
+				// If this image is targeting a placeholder, use the image's placeholder info; otherwise use layout placeholder
+				if (slideItemObj.options._placeholderType === 'pic' && slideItemObj.options._placeholderIdx) {
+					strSlideXml += `    <p:nvPr><p:ph type="pic" idx="${slideItemObj.options._placeholderIdx}"/></p:nvPr>`
+				} else {
+					strSlideXml += '    <p:nvPr>' + genXmlPlaceholder(placeholderObj) + '</p:nvPr>'
+				}
 				strSlideXml += '  </p:nvPicPr>'
 				strSlideXml += '<p:blipFill>'
 				// NOTE: This works for both cases: either `path` or `data` contains the SVG
@@ -1359,11 +1388,18 @@ export function genXmlPlaceholder (placeholderObj: ISlideObject): string {
 
 	const placeholderIdx = placeholderObj.options?._placeholderIdx ? placeholderObj.options._placeholderIdx : ''
 	const placeholderTyp = placeholderObj.options?._placeholderType ? placeholderObj.options._placeholderType : ''
-	const placeholderType: string = placeholderTyp && PLACEHOLDER_TYPES[placeholderTyp] ? (PLACEHOLDER_TYPES[placeholderTyp]).toString() : ''
+	
+	// Map placeholder type - 'pic' maps directly, others go through PLACEHOLDER_TYPES enum
+	let placeholderType: string = ''
+	if (placeholderTyp === 'pic') {
+		placeholderType = 'pic'
+	} else if (placeholderTyp && PLACEHOLDER_TYPES[placeholderTyp]) {
+		placeholderType = (PLACEHOLDER_TYPES[placeholderTyp]).toString()
+	}
 
 	return `<p:ph
 		${placeholderIdx ? ' idx="' + placeholderIdx.toString() + '"' : ''}
-		${placeholderType && PLACEHOLDER_TYPES[placeholderType] ? ` type="${placeholderType}"` : ''}
+		${placeholderType ? ` type="${placeholderType}"` : ''}
 		${placeholderObj.text && placeholderObj.text.length > 0 ? ' hasCustomPrompt="1"' : ''}
 		/>`
 }

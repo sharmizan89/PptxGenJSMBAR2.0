@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Placeholder - v.1.1.2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PptxGenJS v.1.1.2 - Image Placeholder Test</h1>
+    <p>This test verifies that image placeholders can be defined in slide masters and images can be inserted into those placeholders.</p>
+    
+    <button class="btn" onclick="generatePptx()">Generate PPTX with Image Placeholder</button>
+    <button class="btn" onclick="generatePptxNoPlaceholder()">Generate PPTX without Placeholder (comparison)</button>
+    
+    <div id="output" class="output"></div>
+    
+    <script src="./js/pptxgen.bundle.js"></script>
+    <script>
+        // Sample base64 image (small 10x10 red square PNG)
+        const sampleBase64Image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mP8z8BQzwAEjDAGNQAAEDABxM4CQTYAAAAASUVORK5CYII=';
+
+        function generatePptx() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Generating PPTX...';
+
+            try {
+                const pptx = new PptxGenJS();
+                pptx.author = 'Test User';
+                pptx.title = 'Image Placeholder Test';
+                pptx.subject = 'Testing v.1.1.2 Image Placeholder Feature';
+
+                // Define slide master with image placeholder
+                pptx.defineSlideMaster({
+                    title: "CONTENT_WITH_IMAGE",
+                    background: { color: "FFFFFF" },
+                    objects: [
+                        // Title placeholder
+                        {
+                            placeholder: {
+                                options: { name: "title", type: "title", x: 0.5, y: 0.3, w: 8.5, h: 0.8, fontSize: 24, bold: true }
+                            }
+                        },
+                        // Body text placeholder
+                        {
+                            placeholder: {
+                                options: { name: "body", type: "body", x: 0.5, y: 1.3, w: 5.5, h: 4.0, fontSize: 14 }
+                            }
+                        },
+                        // Image placeholder - this is the new feature!
+                        {
+                            placeholder: {
+                                options: { name: "image", type: "pic", x: 6.5, y: 1.3, w: 3.0, h: 4.0 }
+                            }
+                        }
+                    ]
+                });
+
+                // Create slide using the master
+                const slide = pptx.addSlide({ masterName: "CONTENT_WITH_IMAGE" });
+
+                // Add title
+                slide.addText("Image Placeholder Test", {
+                    placeholder: "title"
+                });
+
+                // Add body text
+                slide.addText("This slide demonstrates the new image placeholder feature in v.1.1.2.\n\nThe image on the right was added using addImage() with the placeholder option.", {
+                    placeholder: "body"
+                });
+
+                // Add image to the image placeholder
+                slide.addImage({
+                    data: sampleBase64Image,
+                    placeholder: "image"
+                });
+
+                // Save the file
+                pptx.writeFile({ fileName: "test-image-placeholder.pptx" })
+                    .then(fileName => {
+                        output.innerHTML = '<span style="color:green;">✓ Success!</span> File saved: ' + fileName +
+                            '<br><br>Open the file in PowerPoint to verify that the image appears in the correct position (right side of the slide).';
+                    })
+                    .catch(err => {
+                        output.innerHTML = '<span style="color:red;">✗ Error:</span> ' + err.message;
+                    });
+
+            } catch (e) {
+                output.innerHTML = '<span style="color:red;">✗ Error:</span> ' + e.message;
+                console.error(e);
+            }
+        }
+
+        function generatePptxNoPlaceholder() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Generating PPTX (no placeholder)...';
+
+            try {
+                const pptx = new PptxGenJS();
+                pptx.author = 'Test User';
+                pptx.title = 'Image without Placeholder Test';
+
+                // Create a simple slide
+                const slide = pptx.addSlide();
+
+                // Add title
+                slide.addText("Image without Placeholder", {
+                    x: 0.5, y: 0.3, w: 8.5, h: 0.8, fontSize: 24, bold: true
+                });
+
+                // Add body text
+                slide.addText("This slide shows an image added without a placeholder for comparison.", {
+                    x: 0.5, y: 1.3, w: 5.5, h: 4.0, fontSize: 14
+                });
+
+                // Add image with explicit position
+                slide.addImage({
+                    data: sampleBase64Image,
+                    x: 6.5, y: 1.3, w: 3.0, h: 4.0
+                });
+
+                // Save the file
+                pptx.writeFile({ fileName: "test-no-placeholder.pptx" })
+                    .then(fileName => {
+                        output.innerHTML = '<span style="color:green;">✓ Success!</span> File saved: ' + fileName +
+                            '<br><br>This is a comparison file without placeholder usage.';
+                    })
+                    .catch(err => {
+                        output.innerHTML = '<span style="color:red;">✗ Error:</span> ' + err.message;
+                    });
+
+            } catch (e) {
+                output.innerHTML = '<span style="color:red;">✗ Error:</span> ' + e.message;
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>

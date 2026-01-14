@@ -1784,6 +1784,8 @@ export interface ObjectOptions extends ImageProps, PositionProps, ShapeProps, Ta
 	margin?: Margin
 	colW?: number | number[] // table
 	rowH?: number | number[] // table
+	idx?: number // placeholder index
+	name?: string // placeholder name
 }
 export interface SlideBaseProps {
 	_bkgdImgRid?: number

@@ -1,4 +1,4 @@
-/* PptxGenJS 4.0.1 @ 2026-01-14T12:29:18.591Z */
+/* PptxGenJS 4.0.1 @ 2026-01-14T13:12:09.150Z */
 import JSZip from 'jszip';
 
 /******************************************************************************
@@ -1605,27 +1605,22 @@ function createSlideMaster(props, target) {
                 addTextDefinition(tgt, textContent, object[key].options, false);
             }
             else if (MASTER_OBJECTS[key] && key === 'placeholder') {
-                // TODO: 20180820: Check for existing `name`?
+                // Remap name to placeholder for internal handling
                 object[key].options.placeholder = object[key].options.name;
-                delete object[key].options.name; // remap name for earier handling internally
+                delete object[key].options.name;
                 object[key].options._placeholderType = object[key].options.type;
-                delete object[key].options.type; // remap name for earier handling internally
+                delete object[key].options.type;
                 object[key].options._placeholderIdx = 100 + idx;
-                addTextDefinition(tgt, [{ text: object[key].text }], object[key].options, true);
-                // TODO: ISSUE#599 - only text is suported now (add more below)
-                // else if (object[key].image) addImageDefinition(tgt, object[key].image)
-                /* 20200120: So... image placeholders go into the "slideLayoutN.xml" file and addImage doesnt do this yet...
-                    <p:sp>
-                  <p:nvSpPr>
-                    <p:cNvPr id="7" name="Picture Placeholder 6">
-                      <a:extLst>
-                        <a:ext uri="{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}">
-                          <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id="{CE1AE45D-8641-0F4F-BDB5-080E69CCB034}"/>
-                        </a:ext>
-                      </a:extLst>
-                    </p:cNvPr>
-                    <p:cNvSpPr>
-                */
+                // Check if this is an image/picture placeholder
+                if (object[key].options._placeholderType === 'pic' || object[key].options._placeholderType === 'image') {
+                    // Normalize type to 'pic' for PowerPoint compatibility
+                    object[key].options._placeholderType = 'pic';
+                    addImagePlaceholderDefinition(tgt, object[key].options);
+                }
+                else {
+                    // Text placeholder handling
+                    addTextDefinition(tgt, [{ text: object[key].text }], object[key].options, true);
+                }
             }
         });
     }
@@ -1928,6 +1923,7 @@ function addChartDefinition(target, type, data, opt) {
  * @see: https://stackoverflow.com/questions/164181/how-to-fetch-a-remote-image-to-display-in-a-canvas)
  */
 function addImageDefinition(target, opt) {
+    var _a;
     const newObject = {
         _type: null,
         text: null,
@@ -1936,6 +1932,34 @@ function addImageDefinition(target, opt) {
         imageRid: null,
         hyperlink: null,
     };
+    // Check if targeting a placeholder - if so, inherit position/size from the placeholder definition
+    if (opt.placeholder && target._slideLayout) {
+        const placeholderObj = (_a = target._slideLayout._slideObjects) === null || _a === void 0 ? void 0 : _a.find((obj) => {
+            var _a, _b;
+            return obj._type === SLIDE_OBJECT_TYPES.placeholder &&
+                ((_a = obj.options) === null || _a === void 0 ? void 0 : _a.placeholder) === opt.placeholder &&
+                ((_b = obj.options) === null || _b === void 0 ? void 0 : _b._placeholderType) === 'pic';
+        });
+        if (placeholderObj && placeholderObj.options) {
+            // Inherit position and size from placeholder if not explicitly provided
+            const phOpts = placeholderObj.options;
+            if (opt.x === undefined) {
+                opt.x = phOpts.x;
+            }
+            if (opt.y === undefined) {
+                opt.y = phOpts.y;
+            }
+            if (opt.w === undefined) {
+                opt.w = phOpts.w;
+            }
+            if (opt.h === undefined) {
+                opt.h = phOpts.h;
+            }
+            // Store placeholder index for XML generation
+            opt._placeholderIdx = phOpts._placeholderIdx;
+            opt._placeholderType = 'pic';
+        }
+    }
     // FIRST: Set vars for this image (object param replaces positional args in 1.1.0)
     const intPosX = opt.x || 0;
     const intPosY = opt.y || 0;
@@ -1995,6 +2019,8 @@ function addImageDefinition(target, opt) {
         rounding: typeof opt.rounding === 'boolean' ? opt.rounding : false,
         sizing,
         placeholder: opt.placeholder,
+        _placeholderIdx: opt._placeholderIdx,
+        _placeholderType: opt._placeholderType,
         rotate: opt.rotate || 0,
         flipV: opt.flipV || false,
         flipH: opt.flipH || false,
@@ -2059,6 +2085,24 @@ function addImageDefinition(target, opt) {
         }
     }
     // STEP 6: Add object to slide
+    target._slideObjects.push(newObject);
+}
+/**
+ * Adds an image placeholder to a slide master/layout definition.
+ * This creates a placeholder that can be filled with an image later using addImage({ placeholder: 'name', ... })
+ * @param {PresSlide} target - slide/layout that the placeholder should be added to
+ * @param {ObjectOptions} opts - placeholder options including position (x, y, w, h) and name
+ */
+function addImagePlaceholderDefinition(target, opts) {
+    const newObject = {
+        _type: SLIDE_OBJECT_TYPES.placeholder,
+        image: null,
+        imageRid: null,
+        text: null,
+        hyperlink: null,
+        options: Object.assign(Object.assign({}, opts), { objectName: opts.placeholder ? `Picture Placeholder ${opts.placeholder}` : `Picture Placeholder ${opts._placeholderIdx}` }),
+    };
+    // Add placeholder to slide objects
     target._slideObjects.push(newObject);
 }
 /**
@@ -5392,6 +5436,29 @@ function slideObjectToXml(slide) {
                 break;
             case SLIDE_OBJECT_TYPES.text:
             case SLIDE_OBJECT_TYPES.placeholder:
+                // Handle image/picture placeholders separately
+                if (slideItemObj.options._placeholderType === 'pic') {
+                    // Generate image placeholder shape XML
+                    strSlideXml += '<p:sp>';
+                    strSlideXml += '<p:nvSpPr>';
+                    strSlideXml += `<p:cNvPr id="${idx + 2}" name="${slideItemObj.options.objectName || `Picture Placeholder ${idx}`}"/>`;
+                    strSlideXml += '<p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>';
+                    strSlideXml += '<p:nvPr>';
+                    strSlideXml += `<p:ph type="pic" idx="${slideItemObj.options._placeholderIdx || idx}"/>`;
+                    strSlideXml += '</p:nvPr>';
+                    strSlideXml += '</p:nvSpPr>';
+                    strSlideXml += '<p:spPr>';
+                    strSlideXml += `<a:xfrm><a:off x="${x}" y="${y}"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm>`;
+                    strSlideXml += '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom>';
+                    strSlideXml += '</p:spPr>';
+                    strSlideXml += '<p:txBody>';
+                    strSlideXml += '<a:bodyPr/>';
+                    strSlideXml += '<a:lstStyle/>';
+                    strSlideXml += '<a:p><a:endParaRPr lang="en-US"/></a:p>';
+                    strSlideXml += '</p:txBody>';
+                    strSlideXml += '</p:sp>';
+                    break;
+                }
                 // Lines can have zero cy, but text should not
                 if (!slideItemObj.options.line && cy === 0)
                     cy = EMU * 0.3;
@@ -5550,7 +5617,13 @@ function slideObjectToXml(slide) {
                 }
                 strSlideXml += '    </p:cNvPr>';
                 strSlideXml += '    <p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr>';
-                strSlideXml += '    <p:nvPr>' + genXmlPlaceholder(placeholderObj) + '</p:nvPr>';
+                // If this image is targeting a placeholder, use the image's placeholder info; otherwise use layout placeholder
+                if (slideItemObj.options._placeholderType === 'pic' && slideItemObj.options._placeholderIdx) {
+                    strSlideXml += `    <p:nvPr><p:ph type="pic" idx="${slideItemObj.options._placeholderIdx}"/></p:nvPr>`;
+                }
+                else {
+                    strSlideXml += '    <p:nvPr>' + genXmlPlaceholder(placeholderObj) + '</p:nvPr>';
+                }
                 strSlideXml += '  </p:nvPicPr>';
                 strSlideXml += '<p:blipFill>';
                 // NOTE: This works for both cases: either `path` or `data` contains the SVG
@@ -6323,10 +6396,17 @@ function genXmlPlaceholder(placeholderObj) {
         return '';
     const placeholderIdx = ((_a = placeholderObj.options) === null || _a === void 0 ? void 0 : _a._placeholderIdx) ? placeholderObj.options._placeholderIdx : '';
     const placeholderTyp = ((_b = placeholderObj.options) === null || _b === void 0 ? void 0 : _b._placeholderType) ? placeholderObj.options._placeholderType : '';
-    const placeholderType = placeholderTyp && PLACEHOLDER_TYPES[placeholderTyp] ? (PLACEHOLDER_TYPES[placeholderTyp]).toString() : '';
+    // Map placeholder type - 'pic' maps directly, others go through PLACEHOLDER_TYPES enum
+    let placeholderType = '';
+    if (placeholderTyp === 'pic') {
+        placeholderType = 'pic';
+    }
+    else if (placeholderTyp && PLACEHOLDER_TYPES[placeholderTyp]) {
+        placeholderType = (PLACEHOLDER_TYPES[placeholderTyp]).toString();
+    }
     return `<p:ph
 		${placeholderIdx ? ' idx="' + placeholderIdx.toString() + '"' : ''}
-		${placeholderType && PLACEHOLDER_TYPES[placeholderType] ? ` type="${placeholderType}"` : ''}
+		${placeholderType ? ` type="${placeholderType}"` : ''}
 		${placeholderObj.text && placeholderObj.text.length > 0 ? ' hasCustomPrompt="1"' : ''}
 		/>`;
 }
