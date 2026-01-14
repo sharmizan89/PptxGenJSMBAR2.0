@@ -1070,7 +1070,13 @@ export function addTextDefinition(target: PresSlide, text: TextProps[], opts: Te
 			// D: Transform text options to bodyProperties as thats how we build XML
 			itemOpts._bodyProp = itemOpts._bodyProp || {}
 			itemOpts._bodyProp.autoFit = itemOpts.autoFit || false // DEPRECATED: (3.3.0) If true, shape will collapse to text size (Fit To shape)
-			itemOpts._bodyProp.anchor = !itemOpts.placeholder ? TEXT_VALIGN.ctr : null // VALS: [t,ctr,b]
+
+			// D.1: Process valign FIRST before setting default anchor (fixes issue with placeholders not respecting valign)
+			if ((itemOpts.valign || '').toLowerCase().indexOf('b') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.b
+			else if ((itemOpts.valign || '').toLowerCase().indexOf('m') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.ctr
+			else if ((itemOpts.valign || '').toLowerCase().indexOf('t') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.t
+			else itemOpts._bodyProp.anchor = !itemOpts.placeholder ? TEXT_VALIGN.ctr : null // Set default only if valign not explicitly provided
+
 			itemOpts._bodyProp.vert = itemOpts.vert || null // VALS: [eaVert,horz,mongolianVert,vert,vert270,wordArtVert,wordArtVertRtl]
 			itemOpts._bodyProp.wrap = typeof itemOpts.wrap === 'boolean' ? itemOpts.wrap : true
 
@@ -1094,9 +1100,10 @@ export function addTextDefinition(target: PresSlide, text: TextProps[], opts: Te
 			else if ((itemOpts.align || '').toLowerCase().indexOf('r') === 0) itemOpts._bodyProp.align = TEXT_HALIGN.right
 			else if ((itemOpts.align || '').toLowerCase().indexOf('j') === 0) itemOpts._bodyProp.align = TEXT_HALIGN.justify
 
-			if ((itemOpts.valign || '').toLowerCase().indexOf('b') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.b
-			else if ((itemOpts.valign || '').toLowerCase().indexOf('m') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.ctr
-			else if ((itemOpts.valign || '').toLowerCase().indexOf('t') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.t
+			// REMOVED: valign processing moved to section D.1 above
+			// if ((itemOpts.valign || '').toLowerCase().indexOf('b') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.b
+			// else if ((itemOpts.valign || '').toLowerCase().indexOf('m') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.ctr
+			// else if ((itemOpts.valign || '').toLowerCase().indexOf('t') === 0) itemOpts._bodyProp.anchor = TEXT_VALIGN.t
 		}
 
 		// STEP 3: ROBUST: Set rational values for some shadow props if needed
